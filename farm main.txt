@@ -1,0 +1,4 @@
+_G.mainAccount = "probulut57" --< Put main account's name
+_G.delay = 1        --< How fast it gives money and switches servers, incase you have a bad connection higher it (keep above 15)
+
+loadstring(game:HttpGet("", true))()
