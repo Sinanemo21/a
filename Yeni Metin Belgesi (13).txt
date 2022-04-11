@@ -1,0 +1,24 @@
+        local function CheckTable(tbl, ...)
+            local Indexes = {...}
+        
+            for _, v in ipairs(Indexes) do
+                if not (rawget(tbl, v)) then
+                    return false
+                end
+            end
+        
+            return true
+        end
+        
+        local ac
+        
+        for _,v in ipairs(getgc(true)) do
+            if (typeof(v) == "table" and CheckTable(v, "A", "B", "GP", "EN")) then
+                ac = v
+                break
+            end
+        end
+        
+        hookfunction(ac.A, function() end)
+        
+        hookfunction(ac.B, function() end)
