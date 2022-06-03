@@ -1,0 +1,12 @@
+local silentaim = loadstring(game:HttpGet("https://raw.githubusercontent.com/Sinanemo21/a/main/Slient%20aim.txt"))()
+
+
+--change the vars below to your liking, you can run the below lines on a seperate script and it will also work
+silentaim["SilentAimEnabled"] = true
+silentaim["ShowFOV"] = true
+silentaim["VisibleCheck"] = true
+silentaim["FOV"] = 60
+silentaim["HitChance"] = 100
+silentaim["TargetPart"] = "Head"
+silentaim["BlacklistedPlayers"] = {game.Players.LocalPlayer}
+silentaim["WhitelistedPUIDs"] = {91318356}
