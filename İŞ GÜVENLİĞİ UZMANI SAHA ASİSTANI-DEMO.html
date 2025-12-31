@@ -1,0 +1,2994 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>İSG Saha Asistanı • Pro</title>
+  <meta name="theme-color" content="#0b1220"/>
+  <style>
+    :root{
+      --bg:#0b1220; --card:#101a33; --card2:#0f1a36; --muted:#98a9cb; --text:#eef3ff;
+      --accent:#7aa7ff; --accent2:#31d07f; --warn:#ffcc66; --bad:#ff6b6b;
+      --line:rgba(255,255,255,.10);
+      --shadow: 0 14px 40px rgba(0,0,0,.35);
+      --shadow2: 0 10px 26px rgba(0,0,0,.28);
+      --radius:16px; --radius2:22px;
+      --tap: rgba(122,167,255,.12);
+    }
+    [data-theme="light"]{
+      --bg:#f5f7fb; --card:#ffffff; --card2:#ffffff; --muted:#52627f; --text:#0c1730;
+      --accent:#2b61ff; --accent2:#0ea35a; --warn:#b27a00; --bad:#cc2d2d;
+      --line:rgba(12,23,48,.10);
+      --shadow: 0 14px 34px rgba(14,22,40,.12);
+      --shadow2: 0 10px 22px rgba(14,22,40,.10);
+      --tap: rgba(43,97,255,.10);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background:
+        radial-gradient(1100px 800px at 20% -10%,rgba(122,167,255,.18),transparent 55%),
+        radial-gradient(900px 700px at 90% 0%,rgba(49,208,127,.12),transparent 60%),
+        var(--bg);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+    }
+    button, input, select, textarea { font-family: inherit; }
+    a{color:var(--accent)}
+    .wrap{max-width:1240px;margin:0 auto;padding:16px 14px 92px}
+    @media (min-width: 980px){ .wrap{padding-bottom:18px} }
+
+    /* Top header */
+    header{
+      display:flex; gap:14px; align-items:center; justify-content:space-between; flex-wrap:wrap;
+      padding:10px 6px 0;
+    }
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{
+      width:46px;height:46px;border-radius:16px;
+      background:linear-gradient(135deg, rgba(122,167,255,.95), rgba(49,208,127,.9));
+      box-shadow: var(--shadow);
+      position:relative; overflow:hidden;
+      flex:0 0 auto;
+    }
+    .logo:after{
+      content:""; position:absolute; inset:-20px; transform:rotate(25deg);
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);
+      animation:shine 3.8s infinite;
+    }
+    @keyframes shine{0%{left:-70%} 45%{left:130%} 100%{left:130%}}
+    .title h1{margin:0;font-size:18px;letter-spacing:.2px}
+    .title .sub{color:var(--muted);font-size:12px;margin-top:2px}
+    .sig{
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:10px 12px;
+      background:rgba(255,255,255,.04);
+      box-shadow: var(--shadow2);
+      display:flex; gap:10px; align-items:center;
+      max-width: 100%;
+    }
+    .sig .mark{
+      width:30px;height:30px;border-radius:12px;
+      background:rgba(122,167,255,.22);
+      border:1px solid rgba(122,167,255,.35);
+      display:grid;place-items:center;font-weight:900;
+    }
+    .sig .txt{font-size:12px;line-height:1.25}
+    .sig .txt b{font-weight:900}
+    .sig .actions{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+    .chip{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      color:var(--text);
+      padding:8px 10px;
+      border-radius:999px;
+      cursor:pointer;
+      font-weight:800;
+      font-size:12px;
+    }
+    .chip:active{transform:translateY(1px)}
+    .chip.primary{background:rgba(122,167,255,.18);border-color:rgba(122,167,255,.45)}
+    .chip.good{background:rgba(49,208,127,.14);border-color:rgba(49,208,127,.35)}
+    .chip.warn{background:rgba(255,204,102,.14);border-color:rgba(255,204,102,.35)}
+
+    /* Layout */
+    .layout{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:14px;
+      margin-top:14px;
+    }
+    @media (min-width: 980px){
+      .layout{grid-template-columns: 270px 1fr; align-items:start}
+    }
+
+    /* Sidebar */
+    .side{
+      position:sticky; top:12px;
+      border:1px solid var(--line);
+      border-radius:22px;
+      background:rgba(255,255,255,.03);
+      box-shadow: var(--shadow2);
+      padding:10px;
+      display:none;
+    }
+    @media (min-width: 980px){ .side{display:block} }
+    .navbtn{
+      width:100%;
+      border:1px solid transparent;
+      background:transparent;
+      color:var(--text);
+      border-radius:16px;
+      padding:12px 12px;
+      cursor:pointer;
+      text-align:left;
+      display:flex; align-items:center; gap:10px;
+      font-weight:900;
+      font-size:13px;
+    }
+    .navbtn small{color:var(--muted);font-weight:700}
+    .navbtn:hover{background:rgba(255,255,255,.03)}
+    .navbtn.active{background:rgba(122,167,255,.14);border-color:rgba(122,167,255,.40)}
+    .ico{
+      width:34px;height:34px;border-radius:14px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.02);
+      display:grid;place-items:center;
+      font-size:16px;
+      flex:0 0 auto;
+    }
+
+    /* Mobile bottom nav */
+    .bottom{
+      position:fixed;
+      left:0; right:0; bottom:0;
+      padding:10px 12px calc(10px + env(safe-area-inset-bottom));
+      background:rgba(16,26,51,.78);
+      backdrop-filter: blur(14px);
+      border-top:1px solid var(--line);
+      display:flex;
+      gap:10px;
+      justify-content:space-between;
+      z-index:20;
+    }
+    [data-theme="light"] .bottom{background:rgba(255,255,255,.78)}
+    @media (min-width: 980px){ .bottom{display:none} }
+    .btab{
+      flex:1;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      color:var(--text);
+      border-radius:18px;
+      padding:10px 10px;
+      cursor:pointer;
+      font-weight:900;
+      font-size:12px;
+      display:flex; flex-direction:column; gap:4px; align-items:center; justify-content:center;
+    }
+    .btab.active{background:rgba(122,167,255,.16);border-color:rgba(122,167,255,.45)}
+    .btab span{font-size:16px}
+
+    /* Cards */
+    .card{
+      background:rgba(16,26,51,.88);
+      border:1px solid var(--line);
+      border-radius:22px;
+      box-shadow: var(--shadow);
+    }
+    [data-theme="light"] .card{background:rgba(255,255,255,.88)}
+    .card h2{margin:0;padding:16px 16px 0;font-size:15px}
+    .pad{padding:14px 16px 16px}
+    .grid2{display:grid;grid-template-columns: 1.1fr .9fr; gap:14px}
+    @media (max-width: 980px){ .grid2{grid-template-columns:1fr} }
+
+    /* Forms */
+    label{display:block;color:var(--muted);font-size:12px;margin:10px 0 6px}
+    input, select, textarea{
+      width:100%;
+      padding:12px 12px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      color:var(--text);
+      outline:none;
+    }
+    textarea{min-height:92px;resize:vertical}
+    .two{display:grid;grid-template-columns: 1fr 1fr; gap:10px}
+    @media (max-width: 560px){ .two{grid-template-columns:1fr} }
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .btn{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:16px;
+      cursor:pointer;
+      font-weight:900;
+      font-size:13px;
+    }
+    .btn.primary{background:rgba(122,167,255,.20);border-color:rgba(122,167,255,.55)}
+    .btn.good{background:rgba(49,208,127,.16);border-color:rgba(49,208,127,.45)}
+    .btn.danger{background:rgba(255,107,107,.16);border-color:rgba(255,107,107,.45)}
+    .btn:active{transform:translateY(1px)}
+    .hr{height:1px;background:var(--line);margin:12px 0}
+    .hint{color:rgba(152,169,203,.95);font-size:12px;line-height:1.45}
+    [data-theme="light"] .hint{color:rgba(82,98,127,.95)}
+    .hidden{display:none!important}
+
+    /* KPIs + Mini charts */
+    .kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px}
+    @media (max-width: 820px){ .kpi{grid-template-columns:repeat(2,1fr)}}
+    .k{
+      padding:12px;border-radius:18px;border:1px solid var(--line);background:rgba(255,255,255,.03);
+    }
+    .k .v{font-size:18px;font-weight:1000}
+    .k .t{color:var(--muted);font-size:12px;margin-top:2px}
+    .bars{display:flex;gap:8px;align-items:flex-end;margin-top:10px}
+    .bar{flex:1;border:1px solid var(--line);background:rgba(255,255,255,.03);border-radius:14px;padding:10px}
+    .bar .h{height:84px;border-radius:12px;background:rgba(122,167,255,.16);border:1px solid rgba(122,167,255,.28)}
+    .bar.good .h{background:rgba(49,208,127,.14);border-color:rgba(49,208,127,.28)}
+    .bar.warn .h{background:rgba(255,204,102,.14);border-color:rgba(255,204,102,.28)}
+    .bar.bad .h{background:rgba(255,107,107,.14);border-color:rgba(255,107,107,.28)}
+    .bar .lab{margin-top:8px;font-size:12px;font-weight:900}
+    .bar .num{color:var(--muted);font-size:12px;margin-top:2px}
+
+    /* Tags */
+    .tag{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:1000;border:1px solid var(--line);background:rgba(255,255,255,.03)}
+    .risk-low{border-color:rgba(49,208,127,.35);background:rgba(49,208,127,.14)}
+    .risk-mid{border-color:rgba(255,204,102,.35);background:rgba(255,204,102,.14)}
+    .risk-high{border-color:rgba(255,107,107,.35);background:rgba(255,107,107,.14)}
+    .badge{font-size:11px;padding:4px 8px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--muted)}
+    .right{margin-left:auto}
+
+    /* Table */
+    table{width:100%;border-collapse:separate;border-spacing:0 10px}
+    th{color:var(--muted);font-size:12px;text-align:left;padding:0 10px}
+    td{padding:12px 10px;background:rgba(255,255,255,.03);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+    td:first-child{border-left:1px solid var(--line);border-top-left-radius:16px;border-bottom-left-radius:16px}
+    td:last-child{border-right:1px solid var(--line);border-top-right-radius:16px;border-bottom-right-radius:16px}
+    .nowrap{white-space:nowrap}
+
+    /* Collapsible */
+    details{
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:rgba(255,255,255,.02);
+      padding:10px 12px;
+    }
+    details summary{
+      cursor:pointer;
+      font-weight:1000;
+      list-style:none;
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+    }
+    details summary::-webkit-details-marker{display:none}
+    details .body{margin-top:10px;color:var(--muted);font-size:12px;line-height:1.45}
+
+    /* Toast */
+    .toast{
+      position:fixed;left:50%;transform:translateX(-50%);
+      bottom:96px;
+      background:rgba(16,26,51,.95);
+      border:1px solid var(--line);
+      padding:10px 12px;border-radius:16px;
+      box-shadow: var(--shadow);
+      color:var(--text);
+      font-weight:900;font-size:13px;
+      display:none; max-width: 92vw;
+      z-index:30;
+    }
+    [data-theme="light"] .toast{background:rgba(255,255,255,.92)}
+    @media (min-width: 980px){ .toast{bottom:18px} }
+  </style>
+</head>
+<body>
+  <div class="wrap" id="app" data-theme="dark">
+    <header>
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div class="title">
+          <h1>İSG Saha Asistanı • Pro</h1>
+          <div class="sub">Bulgu & Aksiyon • Kontrol Listeleri • Toolbox Talk • Offline Yedek</div>
+        </div>
+      </div>
+
+      <div class="sig">
+        <div class="mark" id="expertMark">B</div>
+        <div class="txt">
+          <div><b id="expertName">Fatih AKDENİZ</b> <span id="expertTitle">İŞ GÜVENLİĞİ UZMANI</span></div>
+          <div><b id="expertClass">(B)</b> <span id="expertRoleLabel">TASARLAYAN</span></div>
+          <div id="expertExtra" style="color:var(--muted);font-size:11px;margin-top:2px"></div>
+        </div>
+        <div class="actions">
+          <button class="chip primary" id="toggleTheme">🌗 Tema</button>
+          <button class="chip good" id="quickNew">＋ Bulgu</button>
+          <button class="chip warn" id="quickPrint">🖨️ PDF</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="side" aria-label="Menü">
+        <button class="navbtn active" data-tab="dashboard"><span class="ico">📊</span><div>Dashboard<br/><small>Özet & risk dağılımı</small></div></button>
+        <button class="navbtn" data-tab="newFinding"><span class="ico">📝</span><div>Yeni Bulgu<br/><small>Sahada hızlı kayıt</small></div></button>
+        <button class="navbtn" data-tab="checklists"><span class="ico">✅</span><div>Kontrol Listeleri<br/><small>Şantiye/ofis/depo</small></div></button>
+        <button class="navbtn" data-tab="tools"><span class="ico">🧰</span><div>Araçlar<br/><small>Toolbox talk & matris</small></div></button>
+        <button class="navbtn" data-tab="actions"><span class="ico">📌</span><div>Aksiyonlar<br/><small>Takip & filtre</small></div></button>
+        <button class="navbtn" data-tab="notes"><span class="ico">🗒️</span><div>Notlar<br/><small>Günlük kayıt & kararlar</small></div></button>
+
+        <button class="navbtn" data-tab="nearMiss"><span class="ico">⚠️</span><div>Ramak Kala<br/><small>Olay & kök neden</small></div></button>
+<button class="navbtn" data-tab="trainings"><span class="ico">🎓</span><div>Eğitim / Toplantı<br/><small>Toolbox + kayıt</small></div></button>
+<button class="navbtn" data-tab="equipment"><span class="ico">🧯</span><div>Ekipman Kontrol<br/><small>Tüp, kemer, merdiven</small></div></button>
+<button class="navbtn" data-tab="exportImport"><span class="ico">💾</span><div>Yedek<br/><small>JSON / CSV</small></div></button>
+
+        <button class="navbtn" data-tab="settings"><span class="ico">⚙️</span><div>Ayarlar<br/><small>Eşikler & logo</small></div></button>
+        <button class="navbtn" data-tab="help"><span class="ico">ℹ️</span><div>Kullanım<br/><small>Hızlı rehber</small></div></button>
+      </aside>
+
+      <main>
+        <!-- DASHBOARD -->
+        <section id="dashboard" class="grid2">
+          <div class="card">
+            <h2>Bugün Ne Var?</h2>
+            <div class="pad">
+              <div class="two">
+                <div>
+                  <label>İşyeri / Şantiye</label>
+                  <input id="siteName" placeholder="İşyeri / Şantiye adı" />
+                </div>
+                <div>
+                  <label>Tarih</label>
+                  <input id="siteDate" type="date" />
+                </div>
+              </div>
+
+              <div class="two">
+                <div>
+                  <label>İlgili Birim</label>
+                  <input id="siteDept" placeholder="Örn: İnşaat, Depo, Ofis, Üretim..." />
+                </div>
+                <div>
+                  <label>Denetimi Yapan</label>
+                  <input id="auditor" placeholder="Ad Soyad" />
+                </div>
+              </div>
+
+              <div class="hr"></div>
+
+              <div class="kpi">
+                <div class="k"><div class="v" id="kTotal">0</div><div class="t">Toplam Bulgu</div></div>
+                <div class="k"><div class="v" id="kOpen">0</div><div class="t">Açık Aksiyon</div></div>
+                <div class="k"><div class="v" id="kOverdue">0</div><div class="t">Gecikmiş</div></div>
+                <div class="k"><div class="v" id="kHigh">0</div><div class="t">Yüksek Risk</div></div>
+              </div>
+
+              <div class="hr"></div>
+
+              <div class="row">
+                <button class="btn primary" id="goNewFinding">+ Yeni Bulgu Gir</button>
+                <button class="btn" id="goChecklists">Kontrol Listesine Git</button>
+                <span class="tag right" id="storageTag">Offline • Cihazında</span>
+              </div>
+
+              <div class="hint" style="margin-top:10px">
+                “PDF” butonu tarayıcı yazdırma ekranını açar. Oradan “PDF olarak kaydet” seçebilirsin.
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>Risk Dağılımı & Yaklaşan Aksiyonlar</h2>
+            <div class="pad">
+              <div class="bars" aria-label="Risk dağılımı">
+                <div class="bar good">
+                  <div class="h" id="barLow" style="height:20px"></div>
+                  <div class="lab">Düşük</div>
+                  <div class="num" id="nLow">0</div>
+                </div>
+                <div class="bar warn">
+                  <div class="h" id="barMid" style="height:20px"></div>
+                  <div class="lab">Orta</div>
+                  <div class="num" id="nMid">0</div>
+                </div>
+                <div class="bar bad">
+                  <div class="h" id="barHigh" style="height:20px"></div>
+                  <div class="lab">Yüksek</div>
+                  <div class="num" id="nHigh">0</div>
+                </div>
+              </div>
+
+              <div class="hr"></div>
+
+              <div class="two">
+                <div>
+                  <label>Filtre</label>
+                  <select id="dashFilter">
+                    <option value="all">Hepsi (açık)</option>
+                    <option value="overdue">Sadece gecikmiş</option>
+                    <option value="next7">Önümüzdeki 7 gün</option>
+                    <option value="high">Yüksek riskli</option>
+                  </select>
+                </div>
+                <div>
+                  <label>Sıralama</label>
+                  <select id="dashSort">
+                    <option value="dueAsc">Termin: Yakın → Uzak</option>
+                    <option value="riskDesc">Risk: Yüksek → Düşük</option>
+                    <option value="newDesc">Yeni → Eski</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="hr"></div>
+              <div id="dashList" class="hint">Henüz aksiyon yok. “+ Bulgu” ile başlayalım.</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- NEW FINDING -->
+        <section id="newFinding" class="grid2 hidden">
+          <div class="card">
+            <h2>Yeni Bulgu / Tehlike Kaydı</h2>
+            <div class="pad">
+              <div class="two">
+                <div>
+                  <label>Kategori</label>
+                  <select id="cat"></select>
+                </div>
+                <div>
+                  <label>Lokasyon</label>
+                  <input id="loc" placeholder="Örn: 3. kat, kazan dairesi, depo koridoru..." />
+                </div>
+              </div>
+
+              <label>Bulgu / Tehlike Tanımı</label>
+              <textarea id="desc" placeholder="Ne gördün? (net, ölçülebilir)"></textarea>
+
+              <label>Önerilen Önlem (Kontrol Tedbiri)</label>
+              <textarea id="control" placeholder="Ne yapılmalı? (mühendislik / idari / KKD sırası)"></textarea>
+
+              <div class="two">
+                <div>
+                  <label>Olasılık (1-5)</label>
+                  <select id="p"></select>
+                </div>
+                <div>
+                  <label>Şiddet (1-5)</label>
+                  <select id="s"></select>
+                </div>
+              </div>
+
+              <div class="two">
+                <div>
+                  <label>Sorumlu</label>
+                  <input id="owner" placeholder="Örn: Şantiye Şefi / İK / Bakım..." />
+                </div>
+                <div>
+                  <label>Termin</label>
+                  <input id="due" type="date" />
+                </div>
+              </div>
+
+              <label>Fotoğraf (opsiyonel • 1 adet)</label>
+              <input id="photo" type="file" accept="image/*" />
+              <div class="hint">Not: Fotoğraf data olarak saklanır. Çok büyük fotoğraf seçersen yavaşlayabilir (mümkünse küçük çek).</div>
+
+              <div class="row" style="margin-top:10px">
+                <button class="btn primary" id="saveFinding">Kaydet</button>
+                <button class="btn" id="prefillFromTemplate">Şablondan Doldur</button>
+                <button class="btn danger" id="clearFinding">Temizle</button>
+                <span class="tag right" id="riskTag">Risk: 9 (Orta)</span>
+              </div>
+
+              <details style="margin-top:12px">
+                <summary>📌 İpucu: Kontrol hiyerarşisi <span class="badge">Mühendislik → İdari → KKD</span></summary>
+                <div class="body">
+                  Önlemleri yazarken “kaynağında yok etme” ve “toplu koruma” öncelikli düşün. KKD genellikle son basamak.
+                </div>
+              </details>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>Son Eklenenler</h2>
+            <div class="pad">
+              <div id="recent" class="hint">Henüz kayıt yok.</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- CHECKLISTS -->
+        <section id="checklists" class="grid2 hidden">
+          <div class="card">
+            <h2>Hazır Kontrol Listeleri</h2>
+            <div class="pad">
+              <div class="two">
+                <div>
+                  <label>Liste Seç</label>
+                  <select id="clSelect"></select>
+                </div>
+                <div>
+                  <label>Arama</label>
+                  <input id="clSearch" placeholder="liste içinde ara..." />
+                </div>
+              </div>
+
+              <div class="row" style="margin-top:10px">
+                <button class="btn primary" id="addFailedToFindings">“Uygunsuz”ları Bulguya Ekle</button>
+                <button class="btn" id="resetChecklist">Listeyi Sıfırla</button>
+                <button class="btn" id="quickSummary">Özet Çıkar</button>
+              </div>
+
+              <div class="hr"></div>
+              <div id="clItems"></div>
+              <div class="hr"></div>
+              <div class="hint">
+                Sahada “Uygunsuz” işaretlediklerini tek tuşla bulguya dönüştürebilirsin. “Özet” ile Uygun/Uygunsuz sayısı çıkar.
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>Hızlı Şablonlar</h2>
+            <div class="pad">
+              <div class="hint">
+                Şablonlar “Yeni Bulgu” ekranında otomatik doldurma içindir. İstersen Ayarlar’dan kendi şablonlarını ekleyebilirsin.
+              </div>
+              <div class="hr"></div>
+              <div id="tplList"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- TOOLS -->
+        <section id="tools" class="grid2 hidden">
+          <div class="card">
+            <h2>Toolbox Talk (Günlük 5 Dakika)</h2>
+            <div class="pad">
+              <div class="two">
+                <div>
+                  <label>Konu</label>
+                  <select id="tbTopic">
+                    <option value="Yüksekte Çalışma">Yüksekte Çalışma</option>
+                    <option value="Elektrik">Elektrik</option>
+                    <option value="Elle Taşıma">Elle Taşıma</option>
+                    <option value="Kaldırma Operasyonları">Kaldırma Operasyonları</option>
+                    <option value="Kimyasal">Kimyasal</option>
+                    <option value="Yangın">Yangın</option>
+                    <option value="İskele / Platform">İskele / Platform</option>
+                    <option value="Genel Saha Disiplini">Genel Saha Disiplini</option>
+                  </select>
+                </div>
+                <div>
+                  <label>Ek Not</label>
+                  <input id="tbNote" placeholder="Örn: bugün vinç çalışması var / rüzgar yüksek..." />
+                </div>
+              </div>
+
+              <div class="row" style="margin-top:10px">
+                <button class="btn primary" id="genToolbox">Toolbox Metni Üret</button>
+                <button class="btn" id="copyToolbox">Kopyala</button>
+              </div>
+
+              <div class="hr"></div>
+              <label>Toolbox Metni</label>
+              <textarea id="tbOut" readonly></textarea>
+
+              <details style="margin-top:12px">
+                <summary>👥 Katılım imzası önerisi <span class="badge">Saha</span></summary>
+                <div class="body">
+                  Kısa form: Tarih • Konu • Katılımcı ad/soyad • İmza. PDF rapora eklemek için çıktı alabilirsin.
+                </div>
+              </details>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>Risk Matris Ayarı & Hızlı Hesap</h2>
+            <div class="pad">
+              <div class="two">
+                <div>
+                  <label>Eşikler</label>
+                  <div class="hint">Varsayılan: 1-5 Düşük • 6-12 Orta • 15-25 Yüksek</div>
+                  <div class="two" style="margin-top:8px">
+                    <div>
+                      <label style="margin-top:0">Düşük max</label>
+                      <input id="thrLow" type="number" min="1" max="25"/>
+                    </div>
+                    <div>
+                      <label style="margin-top:0">Orta max</label>
+                      <input id="thrMid" type="number" min="1" max="25"/>
+                    </div>
+                  </div>
+                  <div class="row" style="margin-top:10px">
+                    <button class="btn good" id="saveThresholds">Eşikleri Kaydet</button>
+                    <button class="btn" id="resetThresholds">Varsayılan</button>
+                  </div>
+                </div>
+
+                <div>
+                  <label>Hızlı Hesap</label>
+                  <div class="two">
+                    <div>
+                      <label style="margin-top:0">Olasılık</label>
+                      <select id="qp"></select>
+                    </div>
+                    <div>
+                      <label style="margin-top:0">Şiddet</label>
+                      <select id="qs"></select>
+                    </div>
+                  </div>
+                  <div class="hr"></div>
+                  <div class="row">
+                    <span class="tag" id="qRisk">Risk: 9 (Orta)</span>
+                    <span class="badge">Not: Bulgu kaydına otomatik yazmaz</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="hr"></div>
+              <details>
+                <summary>📒 Mini rehber (termin önerisi) <span class="badge">Pratik</span></summary>
+                <div class="body">
+                  Yüksek risk: mümkünse aynı gün / derhal kapat. Orta risk: 7-14 gün içinde. Düşük risk: planlı iyileştirme.
+                </div>
+              </details>
+            </div>
+          </div>
+        </section>
+
+        <!-- ACTIONS -->
+        <section id="actions" class="card hidden">
+          <h2>Aksiyon Takip</h2>
+          <div class="pad">
+            <div class="two">
+              <div>
+                <label>Durum</label>
+                <select id="fStatus">
+                  <option value="all">Hepsi</option>
+                  <option value="open">Açık</option>
+                  <option value="done">Kapalı</option>
+                </select>
+              </div>
+              <div>
+                <label>Arama</label>
+                <input id="fSearch" placeholder="kategori / lokasyon / tanım / sorumlu..." />
+              </div>
+            </div>
+
+            <div class="two">
+              <div>
+                <label>Risk</label>
+                <select id="fRisk">
+                  <option value="all">Hepsi</option>
+                  <option value="high">Yüksek</option>
+                  <option value="mid">Orta</option>
+                  <option value="low">Düşük</option>
+                </select>
+              </div>
+              <div>
+                <label>Sıralama</label>
+                <select id="fSort">
+                  <option value="riskDesc">Risk: Yüksek → Düşük</option>
+                  <option value="dueAsc">Termin: Yakın → Uzak</option>
+                  <option value="newDesc">Yeni → Eski</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="hr"></div>
+
+            <div style="overflow:auto">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Risk</th>
+                    <th>Kategori</th>
+                    <th>Lokasyon / Tanım</th>
+                    <th>Sorumlu</th>
+                    <th>Termin</th>
+                    <th>Durum</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="actionRows"></tbody>
+              </table>
+            </div>
+
+            <div class="hint">Kayıtlar sadece bu cihazda saklanır. Düzenli olarak “Yedek” menüsünden JSON indir.</div>
+          </div>
+        </section>
+
+        
+        <!-- NOTES -->
+        <section id="notes" class="grid2 hidden">
+          <div class="card">
+            <h2>Notlar / Günlük Kayıt</h2>
+            <div class="pad">
+              <div class="two">
+                <div>
+                  <label>Tarih</label>
+                  <input id="noteDate" type="date" />
+                </div>
+                <div>
+                  <label>Etiket (opsiyonel)</label>
+                  <input id="noteTag" placeholder="Örn: Toplantı, Denetim, İSG Kurulu..." />
+                </div>
+              </div>
+
+              <label>Başlık</label>
+              <input id="noteTitle" placeholder="Kısa başlık" />
+
+              <label>Not / Karar / Gözlem</label>
+              <textarea id="noteBody" placeholder="Örn: Bugün şu uygunsuzluklar tespit edildi... alınan aksiyonlar... sorumlular..."></textarea>
+
+              <div class="row" style="margin-top:10px">
+                <button class="btn primary" id="saveNote">Kaydet</button>
+                <button class="btn" id="copyNote">Kopyala</button>
+                <button class="btn danger" id="clearNote">Temizle</button>
+                <button class="btn" id="printNotes">Yazdır / PDF</button>
+              </div>
+
+              <div class="hint" style="margin-top:10px">
+                İpucu: Toplantı/Toolbox notlarını burada biriktirip PDF alabilirsin.
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>Son Notlar</h2>
+            <div class="pad">
+              <div id="noteRecent" class="hint">Henüz not yok.</div>
+            </div>
+          </div>
+        </section>
+
+
+<!-- NEAR MISS -->
+<section id="nearMiss" class="grid2 hidden">
+  <div class="card">
+    <h2>Ramak Kala / Tehlikeli Olay Kaydı</h2>
+    <div class="pad">
+      <div class="two">
+        <div>
+          <label>Olay Tarihi</label>
+          <input id="nmDate" type="date" />
+        </div>
+        <div>
+          <label>Lokasyon</label>
+          <input id="nmLoc" placeholder="Lokasyon" />
+        </div>
+      </div>
+
+      <label>Olay Tanımı (Ne oldu?)</label>
+      <textarea id="nmDesc" placeholder="Kısa ve net anlat..."></textarea>
+
+      <div class="two">
+        <div>
+          <label>Potansiyel Sonuç</label>
+          <select id="nmCons">
+            <option value="İlk yardım gerektirmeyen">İlk yardım gerektirmeyen</option>
+            <option value="İlk yardım">İlk yardım</option>
+            <option value="Kayıp günlü yaralanma">Kayıp günlü yaralanma</option>
+            <option value="Ağır yaralanma">Ağır yaralanma</option>
+            <option value="Ölümcül">Ölümcül</option>
+            <option value="Maddi hasar">Maddi hasar</option>
+          </select>
+        </div>
+        <div>
+          <label>Olay Türü</label>
+          <select id="nmType">
+            <option value="Düşme">Düşme</option>
+            <option value="Düşen cisim">Düşen cisim</option>
+            <option value="Elektrik">Elektrik</option>
+            <option value="Kaldırma">Kaldırma</option>
+            <option value="Makine">Makine</option>
+            <option value="Kimyasal">Kimyasal</option>
+            <option value="Yangın">Yangın</option>
+            <option value="Trafik / forklift">Trafik / forklift</option>
+            <option value="Diğer">Diğer</option>
+          </select>
+        </div>
+      </div>
+
+      <label>İlk Müdahale / Alınan Anlık Önlem</label>
+      <textarea id="nmImmediate" placeholder="Örn: alan izole edildi, enerji kesildi, ekipman kullanımdan kaldırıldı..."></textarea>
+
+      <label>Kök Neden (kısaca)</label>
+      <textarea id="nmRoot" placeholder="Örn: prosedür eksikliği, denetim zayıf, ekipman uygunsuz, eğitim ihtiyacı..."></textarea>
+
+      <div class="two">
+        <div>
+          <label>Sorumlu</label>
+          <input id="nmOwner" placeholder="Sorumlu" />
+        </div>
+        <div>
+          <label>Takip Termin</label>
+          <input id="nmDue" type="date" />
+        </div>
+      </div>
+
+      <label>Fotoğraf (opsiyonel • 1 adet)</label>
+      <input id="nmPhoto" type="file" accept="image/*" />
+      <div class="hint">Ramak kala kayıtları, iyileştirme fırsatıdır. Suçlu aramak yerine sistem iyileştirmeye odaklan.</div>
+
+      <div class="row" style="margin-top:10px">
+        <button class="btn primary" id="saveNearMiss">Kaydet</button>
+        <button class="btn danger" id="clearNearMiss">Temizle</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Son Ramak Kala Kayıtları</h2>
+    <div class="pad">
+      <div id="nmRecent" class="hint">Henüz kayıt yok.</div>
+    </div>
+  </div>
+</section>
+
+<!-- TRAININGS -->
+<section id="trainings" class="grid2 hidden">
+  <div class="card">
+    <h2>Eğitim / Toplantı Kaydı</h2>
+    <div class="pad">
+      <div class="two">
+        <div>
+          <label>Tarih</label>
+          <input id="trDate" type="date" />
+        </div>
+        <div>
+          <label>Tür</label>
+          <select id="trType">
+            <option value="Toolbox Talk">Toolbox Talk</option>
+            <option value="İSG Eğitimi">İSG Eğitimi</option>
+            <option value="Acil Durum Tatbikatı">Acil Durum Tatbikatı</option>
+            <option value="Toplantı">Toplantı</option>
+          </select>
+        </div>
+      </div>
+
+      <label>Konu</label>
+      <input id="trTopic" placeholder="Konu" />
+
+      <div class="two">
+        <div>
+          <label>Eğitimi Veren</label>
+          <input id="trTrainer" placeholder="Ad Soyad" />
+        </div>
+        <div>
+          <label>Katılımcı Sayısı</label>
+          <input id="trCount" type="number" min="0" placeholder="0" />
+        </div>
+      </div>
+
+      <div class="two">
+        <div>
+          <label>Süre (dk)</label>
+          <input id="trMin" type="number" min="0" placeholder="0" />
+        </div>
+        <div>
+          <label>Yer</label>
+          <input id="trLoc" placeholder="Yer" />
+        </div>
+      </div>
+
+      <label>Notlar</label>
+      <textarea id="trNotes" placeholder="Alınan kararlar, gözlemler, aksiyonlar..."></textarea>
+
+      <label>Fotoğraf (opsiyonel • 1 adet)</label>
+      <input id="trPhoto" type="file" accept="image/*" />
+
+      <div class="row" style="margin-top:10px">
+        <button class="btn primary" id="saveTraining">Kaydet</button>
+        <button class="btn" id="printTraining">Yazdır / PDF</button>
+        <button class="btn danger" id="clearTraining">Temizle</button>
+      </div>
+
+      <details style="margin-top:12px">
+        <summary>📌 Pratik: katılım listesi <span class="badge">Şablon</span></summary>
+        <div class="body">
+          Tarih • Konu • Yer • Eğitimi veren • Katılımcı ad/soyad • İmza. Bu sayfayı PDF alıp ek yapabilirsin.
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Son Eğitim / Toplantılar</h2>
+    <div class="pad">
+      <div id="trRecent" class="hint">Henüz kayıt yok.</div>
+    </div>
+  </div>
+</section>
+
+<!-- EQUIPMENT -->
+<section id="equipment" class="grid2 hidden">
+  <div class="card">
+    <h2>Ekipman Kontrol (Hızlı)</h2>
+    <div class="pad">
+      <div class="two">
+        <div>
+          <label>Ekipman Türü</label>
+          <select id="eqType"></select>
+        </div>
+        <div>
+          <label>Kimlik / Seri No</label>
+          <input id="eqId" placeholder="Seri no / lokasyon kodu" />
+        </div>
+      </div>
+
+      <div class="two">
+        <div>
+          <label>Kontrol Tarihi</label>
+          <input id="eqDate" type="date" />
+        </div>
+        <div>
+          <label>Bir Sonraki Kontrol</label>
+          <input id="eqNext" type="date" />
+        </div>
+      </div>
+
+      <div class="hr"></div>
+      <div id="eqItems"></div>
+
+      <label>Sonuç</label>
+      <select id="eqResult">
+        <option value="Uygun">Uygun</option>
+        <option value="Şartlı uygun">Şartlı uygun</option>
+        <option value="Uygunsuz (kullanma)">Uygunsuz (kullanma)</option>
+      </select>
+
+      <label>Not</label>
+      <textarea id="eqNote" placeholder="Tespit/öneri..."></textarea>
+
+      <div class="row" style="margin-top:10px">
+        <button class="btn primary" id="saveEq">Kaydet</button>
+        <button class="btn danger" id="clearEq">Temizle</button>
+      </div>
+
+      <div class="hint" style="margin-top:10px">
+        Bu bölüm “hızlı saha kontrolü” içindir. Resmi periyodik kontrol yükümlülükleri için ayrıca kayıt tutulmalıdır.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Son Ekipman Kontrolleri</h2>
+    <div class="pad">
+      <div id="eqRecent" class="hint">Henüz kayıt yok.</div>
+    </div>
+  </div>
+</section>
+<!-- EXPORT/IMPORT -->
+        <section id="exportImport" class="grid2 hidden">
+          <div class="card">
+            <h2>Dışa Aktar</h2>
+            <div class="pad">
+              <div class="row">
+                <button class="btn primary" id="exportJson">JSON Yedek İndir</button>
+                <button class="btn" id="exportCsv">CSV İndir</button>
+                <button class="btn" id="copyJson">JSON Kopyala</button>
+              </div>
+              <div class="hr"></div>
+              <label>Önizleme (JSON)</label>
+              <textarea id="exportPreview" readonly></textarea>
+              <div class="hint">JSON yedeği başka bir telefona/PC’ye taşıyıp “İçe Aktar” ile geri yükleyebilirsin.</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>İçe Aktar</h2>
+            <div class="pad">
+              <label>JSON Yapıştır</label>
+              <textarea id="importBox" placeholder="Buraya JSON yedeğini yapıştır..."></textarea>
+              <div class="row">
+                <button class="btn good" id="importJson">İçe Aktar (Birleştir)</button>
+                <button class="btn danger" id="wipeAll">Tüm Kayıtları Sil</button>
+              </div>
+              <div class="hint">“Birleştir” aynı kaydı tekrar eklemez (id bazlı). Silme işlemi geri alınamaz.</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SETTINGS -->
+        
+        <section id="settings" class="grid2 hidden">
+          <div class="card">
+            <h2>İSG Uzmanı Bilgileri</h2>
+            <div class="pad">
+              <div class="two">
+                <div>
+                  <label>Ad Soyad</label>
+                  <input id="expName" placeholder="Örn: Fatih AKDENİZ" />
+                </div>
+                <div>
+                  <label>Belge Sınıfı</label>
+                  <select id="expClass">
+                    <option value="A">(A)</option>
+                    <option value="B">(B)</option>
+                    <option value="C">(C)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="two">
+                <div>
+                  <label>Belge No (opsiyonel)</label>
+                  <input id="expCert" placeholder="Örn: 12.34.5678" />
+                </div>
+                <div>
+                  <label>OSGB / Firma (opsiyonel)</label>
+                  <input id="expOrg" placeholder="Örn: X OSGB / Y İnşaat" />
+                </div>
+              </div>
+
+              <label>İletişim (opsiyonel)</label>
+              <input id="expContact" placeholder="Örn: 05xx xxx xx xx • e‑posta" />
+
+              <div class="row" style="margin-top:10px">
+                <button class="btn good" id="saveExpert">Kaydet</button>
+                <button class="btn danger" id="clearExpert">Temizle</button>
+              </div>
+
+              <div class="hint" style="margin-top:10px">
+                Bu bilgiler üst başlıktaki imza alanında “(A/B/C) TASARLAYAN” olarak görünür ve cihazında saklanır.
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>Görünüm & Marka</h2>
+            <div class="pad">
+              <label>Başlık (opsiyonel)</label>
+              <input id="brandTitle" placeholder="Örn: İSG Takip Paneli" />
+              <label>Logo (opsiyonel • küçük)</label>
+              <input id="brandLogo" type="file" accept="image/*" />
+              <div class="row" style="margin-top:10px">
+                <button class="btn good" id="saveBrand">Kaydet</button>
+                <button class="btn danger" id="clearBrand">Temizle</button>
+              </div>
+              <div class="hint" style="margin-top:10px">
+                Logo yalnızca bu cihazda saklanır (offline). PDF çıktısında başlık/isim görünür.
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>Şablon Yönetimi</h2>
+            <div class="pad">
+              <div class="hint">Kendi bulgu şablonlarını ekle (ör. “Kapalı alan” / “LOTO”).</div>
+              <div class="hr"></div>
+
+              <div class="two">
+                <div>
+                  <label>Şablon Adı</label>
+                  <input id="tName" placeholder="Örn: LOTO eksik" />
+                </div>
+                <div>
+                  <label>Kategori</label>
+                  <input id="tCat" placeholder="Örn: Makine / Elektrik" />
+                </div>
+              </div>
+              <label>Bulgu</label>
+              <textarea id="tDesc" placeholder="Şablon bulgu metni..."></textarea>
+              <label>Öneri</label>
+              <textarea id="tCtrl" placeholder="Şablon öneri metni..."></textarea>
+              <div class="two">
+                <div>
+                  <label>Olasılık</label>
+                  <select id="tP"></select>
+                </div>
+                <div>
+                  <label>Şiddet</label>
+                  <select id="tS"></select>
+                </div>
+              </div>
+              <div class="row" style="margin-top:10px">
+                <button class="btn primary" id="addTemplate">Şablon Ekle</button>
+                <button class="btn" id="resetTemplates">Varsayılana Dön</button>
+              </div>
+
+              <div class="hr"></div>
+              <div id="userTplList" class="hint">Henüz özel şablon yok.</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- HELP -->
+        <section id="help" class="card hidden">
+          <h2>Kullanım (Hızlı)</h2>
+          <div class="pad">
+            <div class="hint">
+              <b>1)</b> Dashboard’dan işyeri bilgilerini gir.<br/>
+              <b>2)</b> “Yeni Bulgu” ile tespitleri kaydet, termin/sorumlu ata.<br/>
+              <b>3)</b> “Kontrol Listeleri”nden hızlı denetim yap, uygunsuzları tek tuşla bulguya çevir.<br/>
+              <b>4)</b> “Araçlar” → Toolbox talk ile günlük 5 dk konuşma metni üret.<br/>
+              <b>5)</b> “Yedek” menüsünden JSON indirip düzenli yedek al.<br/><br/>
+              <b>Play Store’a yüklemek:</b> Bu dosyayı HTTPS bir adrese (Netlify gibi) koyup Android’de TWA ile paketleyebiliriz.
+            </div>
+
+            <div class="hr"></div>
+
+            <details>
+              <summary>🔒 Veri gizliliği <span class="badge">Offline</span></summary>
+              <div class="body">
+                Kayıtlar yerel depolamada tutulur. Sunucuya otomatik gönderim yoktur. Yedekleri güvenli sakla.
+              </div>
+            </details>
+
+            <div class="hr"></div>
+            <div class="hint">
+              <b>Uyarı:</b> Bu uygulama bir “saha kayıt/organizasyon” yardımcısıdır. Resmi doküman ve mevzuat yükümlülüklerini ayrıca yürütmek gerekir.
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <!-- Mobile bottom nav -->
+    <div class="bottom" aria-label="Alt menü">
+      <button class="btab active" data-tab="dashboard"><span>📊</span>Özet</button>
+      <button class="btab" data-tab="newFinding"><span>📝</span>Bulgu</button>
+      <button class="btab" data-tab="checklists"><span>✅</span>Liste</button>
+      <button class="btab" data-tab="tools"><span>🧰</span>Araç</button>
+      <button class="btab" data-tab="actions"><span>📌</span>Takip</button>
+    </div>
+  </div>
+
+<script>
+(function(){
+  const $ = (id)=>document.getElementById(id);
+  const app = $("app");
+
+  // ===== Storage =====
+  const KEY = "isg_saha_asistani_pro_v2";
+  const DEFAULT_THRESH = { lowMax: 5, midMax: 12 };
+  const CATS = ["Genel","İnşaat","Elektrik","Yüksekte Çalışma","İskele / Platform","Kaldırma / Vinç","Elle Taşıma","Kimyasal","Yangın","Makine","Depo / İstif","Ofis","Kapalı Alan","LOTO / Enerji İzolasyonu"];
+
+  function load(){
+    try{
+      const raw = localStorage.getItem(KEY);
+      if(!raw) return {meta:{expert:{}}, thresholds:{...DEFAULT_THRESH}, findings:[], nearMisses:[], trainings:[], equipmentChecks:[], notes:[], checklist:{}, brand:{}, userTemplates:[]};
+      const parsed = JSON.parse(raw);
+      if(!parsed || typeof parsed!=="object") throw new Error("bad");
+      if(!parsed.meta) parsed.meta = {};
+      if(!parsed.meta.expert) parsed.meta.expert = {};
+      if(!parsed.brand) parsed.brand = {};
+      if(!parsed.thresholds) parsed.thresholds = {...DEFAULT_THRESH};
+      if(!Array.isArray(parsed.findings)) parsed.findings = [];
+      if(!Array.isArray(parsed.nearMisses)) parsed.nearMisses = [];
+      if(!Array.isArray(parsed.trainings)) parsed.trainings = [];
+      if(!Array.isArray(parsed.equipmentChecks)) parsed.equipmentChecks = [];
+      if(!Array.isArray(parsed.notes)) parsed.notes = [];
+      if(!parsed.checklist) parsed.checklist = {};
+      if(!Array.isArray(parsed.userTemplates)) parsed.userTemplates = [];
+      return parsed;
+    }catch(e){
+      return {meta:{expert:{}}, thresholds:{...DEFAULT_THRESH}, findings:[], nearMisses:[], trainings:[], equipmentChecks:[], notes:[], checklist:{}, brand:{}, userTemplates:[]};
+    }
+  }
+  function save(){ localStorage.setItem(KEY, JSON.stringify(state)); }
+
+  let state = load();
+
+  // ===== Helpers =====
+  function todayISO(){
+    const d = new Date();
+    const tz = d.getTimezoneOffset() * 60000;
+    return (new Date(d - tz)).toISOString().slice(0,10);
+  }
+  function uid(){ return "F" + Math.random().toString(16).slice(2) + Date.now().toString(16); }
+  function clamp(n,min,max){ return Math.max(min, Math.min(max, n)); }
+  function riskLevel(score){
+    const lowMax = clamp(Number(state.thresholds.lowMax||DEFAULT_THRESH.lowMax),1,25);
+    const midMax = clamp(Number(state.thresholds.midMax||DEFAULT_THRESH.midMax),1,25);
+    if(score <= lowMax) return "low";
+    if(score <= midMax) return "mid";
+    return "high";
+  }
+  function riskText(level){ return level==="high"?"Yüksek":(level==="mid"?"Orta":"Düşük"); }
+  function isOverdue(due, status){
+    if(status==="done") return false;
+    if(!due) return false;
+    return due < todayISO();
+  }
+  function escapeHtml(str){
+    return String(str ?? "")
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#39;");
+  }
+  function shorten(s, n){
+    s = String(s ?? "");
+    if(s.length <= n) return s;
+    return s.slice(0,n-1) + "…";
+  }
+  function toast(msg){
+    const t = $("toast");
+    t.textContent = msg;
+    t.style.display = "block";
+    clearTimeout(toast._tm);
+    toast._tm = setTimeout(()=>t.style.display="none", 2200);
+  }
+  function addDays(iso, n){
+    const d = new Date(iso+"T00:00:00");
+    d.setDate(d.getDate()+n);
+    return d.toISOString().slice(0,10);
+  }
+
+  // ===== Theme =====
+  function setTheme(t){
+    app.dataset.theme = t;
+    state.meta.theme = t;
+    save();
+  }
+  $("toggleTheme").addEventListener("click", ()=>{
+    setTheme(app.dataset.theme === "dark" ? "light" : "dark");
+  });
+
+  // ===== Tabs =====
+  const sections = ["dashboard","newFinding","checklists","tools","actions","notes","nearMiss","trainings","equipment","exportImport","settings","help"].map(id=>$(id));
+  const sideBtns = Array.from(document.querySelectorAll(".navbtn"));
+  const bottomBtns = Array.from(document.querySelectorAll(".btab"));
+
+  function setActive(tab){
+    sideBtns.forEach(b=>b.classList.toggle("active", b.dataset.tab===tab));
+    bottomBtns.forEach(b=>b.classList.toggle("active", b.dataset.tab===tab));
+    sections.forEach(s=>s.classList.toggle("hidden", s.id!==tab));
+
+    if(tab==="dashboard") renderDashboard();
+    if(tab==="newFinding") renderRecent();
+    if(tab==="checklists") renderChecklists();
+    if(tab==="tools") renderTools();
+    if(tab==="actions") renderActions();
+    if(tab==="notes") renderNotes();
+    if(tab==="exportImport") renderExportPreview();
+    if(tab==="settings") renderSettings();
+  }
+  sideBtns.forEach(b=>b.addEventListener("click", ()=>setActive(b.dataset.tab)));
+  bottomBtns.forEach(b=>b.addEventListener("click", ()=>setActive(b.dataset.tab)));
+
+  // Quick buttons
+  $("quickNew").addEventListener("click", ()=>setActive("newFinding"));
+  $("quickPrint").addEventListener("click", ()=>printReport());
+
+  // ===== Populate selects =====
+  function fillCat(){
+    const sel = $("cat");
+    sel.innerHTML = "";
+    CATS.forEach(c=>{
+      const o = document.createElement("option");
+      o.value=c; o.textContent=c;
+      sel.appendChild(o);
+    });
+  }
+  function fillPS(id){
+    const sel = $(id);
+    sel.innerHTML = "";
+    const items = [
+      ["1","1 - Çok düşük"],["2","2 - Düşük"],["3","3 - Orta"],["4","4 - Yüksek"],["5","5 - Çok yüksek"]
+    ];
+    items.forEach(([v,t],i)=>{
+      const o = document.createElement("option");
+      o.value=v; o.textContent=t;
+      if(v==="3") o.selected = true;
+      sel.appendChild(o);
+    });
+  }
+  fillCat();
+  ["p","s","qp","qs","tP","tS"].forEach(fillPS);
+
+  // ===== Meta inputs =====
+  function syncMeta(){
+    $("siteName").value = state.meta.siteName || "";
+    $("siteDept").value = state.meta.siteDept || "";
+    $("auditor").value  = state.meta.auditor  || "";
+    $("siteDate").value = state.meta.siteDate || todayISO();
+  }
+  function pullMeta(){
+    state.meta.siteName = $("siteName").value.trim();
+    state.meta.siteDept = $("siteDept").value.trim();
+    state.meta.auditor  = $("auditor").value.trim();
+    state.meta.siteDate = $("siteDate").value || todayISO();
+    save();
+  }
+  ["siteName","siteDept","auditor","siteDate"].forEach(id=>$(id).addEventListener("change", pullMeta));
+
+  // ===== Expert (İSG Uzmanı) =====
+  function getExpert(){
+    const ex = (state.meta && state.meta.expert) ? state.meta.expert : {};
+    return {
+      name: (ex.name || "Fatih AKDENİZ").trim(),
+      cls:  (ex.cls  || "B").trim().toUpperCase(),
+      cert: (ex.cert || "").trim(),
+      org:  (ex.org  || "").trim(),
+      contact: (ex.contact || "").trim()
+    };
+  }
+  function applyExpertToHeader(){
+    const ex = getExpert();
+    const mark = $("expertMark");
+    const nm   = $("expertName");
+    const cl   = $("expertClass");
+    const extra= $("expertExtra");
+    if(mark) mark.textContent = ex.cls || "B";
+    if(nm) nm.textContent = ex.name || "İSG UZMANI";
+    if(cl) cl.textContent = `(${ex.cls || "B"})`;
+
+    const parts = [];
+    if(ex.cert) parts.push(`Belge No: ${ex.cert}`);
+    if(ex.org) parts.push(ex.org);
+    if(ex.contact) parts.push(ex.contact);
+    extra.textContent = parts.join(" • ");
+  }
+
+  // ===== Thresholds UI (Tools) =====
+  function updateQuickRisk(){
+    const p = Number($("qp").value);
+    const s = Number($("qs").value);
+    const score = p*s;
+    const lvl = riskLevel(score);
+    const el = $("qRisk");
+    el.className = "tag " + (lvl==="high"?"risk-high":(lvl==="mid"?"risk-mid":"risk-low"));
+    el.textContent = `Risk: ${score} (${riskText(lvl)})`;
+  }
+  $("qp").addEventListener("change", updateQuickRisk);
+  $("qs").addEventListener("change", updateQuickRisk);
+
+  function updateRiskTag(){
+    const p = Number($("p").value);
+    const s = Number($("s").value);
+    const score = p*s;
+    const lvl = riskLevel(score);
+    const tag = $("riskTag");
+    tag.className = "tag " + (lvl==="high"?"risk-high":(lvl==="mid"?"risk-mid":"risk-low"));
+    tag.textContent = `Risk: ${score} (${riskText(lvl)})`;
+  }
+  $("p").addEventListener("change", updateRiskTag);
+  $("s").addEventListener("change", updateRiskTag);
+
+  // ===== Templates =====
+  const defaultTemplates = [
+    {id:"t1", title:"Açık elektrik panosu", cat:"Elektrik", loc:"", desc:"Elektrik panosu kapağı açık / kilitsiz. Yetkisiz erişim riski.",
+      control:"Pano kapağı kapatılmalı, kilitlenmeli. Uyarı levhası ve yetkilendirme sağlanmalı. Periyodik pano kontrolü yapılmalı.", p:3,s:4},
+    {id:"t2", title:"KKD uygunsuzluğu (baret / gözlük)", cat:"Genel", loc:"", desc:"Çalışanlarda baret/gözlük kullanımı yetersiz. Göz yaralanması / baş travması riski.",
+      control:"Saha sorumlusu tarafından anlık uyarı, KKD kontrolü ve disiplin süreci. KKD zimmet ve eğitim kayıtlarının güncellenmesi.", p:3,s:3},
+    {id:"t3", title:"Yüksekte çalışma korkuluk yok", cat:"Yüksekte Çalışma", loc:"", desc:"Açık kenar/boşlukta korkuluk yok. Düşme riski.",
+      control:"Toplu koruma öncelikli: korkuluk + ara korkuluk + eteklik. Uygunsa güvenlik ağı. KKD yalnız başına yeterli değil.", p:4,s:5},
+    {id:"t4", title:"İskele etiketleme yok", cat:"İskele / Platform", loc:"", desc:"İskelede yeşil/kırmızı etiketleme ve kontrol kaydı yok. Kullanım güvenliği belirsiz.",
+      control:"Yetkili kişi kontrolü sonrası etiketleme yapılmalı. Günlük görsel kontrol + periyodik kayıt oluşturulmalı.", p:3,s:4},
+    {id:"t5", title:"Yangın tüpü erişimi kapalı", cat:"Yangın", loc:"", desc:"Yangın tüpünün önü kapalı / erişim zor. Acilde müdahale gecikebilir.",
+      control:"Erişim alanı boşaltılmalı (min 1 m). Yönlendirme levhası. Aylık kontrol ve dolum tarihleri takip edilmeli.", p:3,s:3},
+    {id:"t6", title:"Kaldırma: sapan yıpranmış", cat:"Kaldırma / Vinç", loc:"", desc:"Sapan/halat üzerinde yıpranma var. Kopma riski.",
+      control:"Kullanımdan kaldır, uygun sapan ile değiştir. Aksesuar periyodik kontrol kayıtlarını güncelle.", p:3,s:5},
+    {id:"t7", title:"LOTO yok / enerji izolasyonu belirsiz", cat:"LOTO / Enerji İzolasyonu", loc:"", desc:"Bakım/temizlik sırasında enerji izolasyonu (LOTO) uygulanmıyor. Beklenmedik çalıştırma riski.",
+      control:"Enerji kaynaklarını belirle, kilitle/etiketle (LOTO). Yetkilendirme ve doğrulama adımlarını kayıt altına al.", p:4,s:5},
+{id:"t8", title:"Kapalı alan giriş izni yok", cat:"Kapalı Alan", loc:"", desc:"Kapalı alana giriş izin formu/ölçüm/izleme şartları sağlanmadan giriş planlanıyor. Boğulma/zehirlenme riski.",
+  control:"Kapalı alan prosedürü uygulanmalı: gaz ölçümü, havalandırma, gözcü, kurtarma planı, izin formu ve yetkilendirme.", p:4,s:5},
+{id:"t9", title:"Makine koruyucu kapağı sökülmüş", cat:"Makine", loc:"", desc:"Makine üzerinde koruyucu muhafaza/kapak sökülmüş veya devre dışı. Sıkışma/ezilme riski.",
+  control:"Koruyucular takılmalı, emniyet switchleri devre dışı bırakılmamalı. Bakım öncesi LOTO uygulanmalı.", p:4,s:4},
+{id:"t10", title:"Forklift hız / yaya ayrımı yetersiz", cat:"Depo / İstif", loc:"", desc:"Forklift güzergahı ile yaya yolu net ayrılmamış. Çarpma/ezilme riski.",
+  control:"Yaya-forklift yolları çizgi/bariyer ile ayrılmalı. Hız limitleri ve ayna/ikazlar konumlandırılmalı.", p:3,s:5},
+{id:"t11", title:"Kimyasal etiket/MSDS eksik", cat:"Kimyasal", loc:"", desc:"Kimyasal kaplarda etiket yok veya MSDS erişimi yok. Maruziyet ve yanlış kullanım riski.",
+  control:"Etiketleme tamamlanmalı. MSDS erişimi sağlanmalı. Uygun depolama ve KKD seçimi yapılmalı.", p:3,s:4},
+{id:"t12", title:"Sıcak iş izni uygulanmıyor", cat:"Yangın", loc:"", desc:"Kaynak/taşlama gibi sıcak işlerde izin formu ve yangın önlemleri uygulanmıyor. Yangın riski.",
+  control:"Sıcak iş izin prosedürü, yangın gözcüsü, kıvılcım perdesi, çevre temizliği, uygun söndürücü hazır bulundurulmalı.", p:4,s:5},
+{id:"t13", title:"Merdiven uygunsuz kullanılıyor", cat:"Genel", loc:"", desc:"Merdiven sabitleme/açı uygun değil veya üst basamakta çalışma yapılıyor. Düşme riski.",
+  control:"Merdiven uygun açıyla kurulmalı, sabitlenmeli. Uygun platform/iskeleden çalışma planlanmalı.", p:3,s:4},
+{id:"t14", title:"Kablo geçişi korumasız", cat:"Elektrik", loc:"", desc:"Yaya/araç geçişinde kablolar korumasız. Ezilme ve elektrik riski.",
+  control:"Kablo köprüsü/koruma kullanılmalı, kablo güzergahı düzenlenmeli. Hasarlı kablo derhal değiştirilmeli.", p:3,s:4},
+{id:"t15", title:"Acil çıkış önü kapalı", cat:"Yangın", loc:"", desc:"Acil çıkış kapısı önü malzeme ile kapalı veya kilitli. Tahliye gecikmesi riski.",
+  control:"Acil çıkış önü sürekli açık tutulmalı. Kilit/engeller kaldırılmalı. Uygun yönlendirme ve denetim yapılmalı.", p:3,s:5},
+{id:"t16", title:"Gürültü maruziyeti kontrolsüz", cat:"Genel", loc:"", desc:"Yüksek gürültülü alanda ölçüm/işaretleme ve kulaklık kullanımı yetersiz. İşitme kaybı riski.",
+  control:"Gürültü ölçümü ve risk değerlendirmesi yapılmalı. Mühendislik önlemleri + uygun kulak koruyucu temini ve kullanımı.", p:3,s:4},
+{id:"t17", title:"Toz kontrolü yetersiz", cat:"Genel", loc:"", desc:"Kesme/taşlama/temizlik faaliyetlerinde toz bastırma ve uygun maske kullanımı yetersiz. Solunum riski.",
+  control:"Islak kesim/toz emişi uygulanmalı. Uygun maske (P2/P3) ve eğitim. Alan temizliği planlı yapılmalı.", p:3,s:4},
+{id:"t18", title:"Dökülme kiti yok", cat:"Kimyasal", loc:"", desc:"Kimyasal depolama/transfer alanında dökülme kiti ve prosedür yok. Kayma/yanma/çevresel risk.",
+  control:"Dökülme kiti temin edilmeli. Dökülme müdahale talimatı görünür olmalı. Eğitim yapılmalı.", p:3,s:4},
+{id:"t19", title:"Kaldırma planı yok", cat:"Kaldırma / Vinç", loc:"", desc:"Kritik kaldırma için plan/izin ve görev dağılımı yapılmamış. Devrilme/çarpma riski.",
+  control:"Kaldırma planı, yük hesapları, alan izolasyonu, görevli işaretçi ve iletişim planı hazırlanmalı.", p:4,s:5},
+{id:"t20", title:"Kesici-delici atıkları uygunsuz", cat:"Genel", loc:"", desc:"Kesici-delici atıklar uygun kutuda toplanmıyor. Yaralanma ve enfeksiyon riski.",
+  control:"Kesici-delici kutuları sağlanmalı, doluluk takip edilmeli. Uygun atık prosedürü ve eğitim yapılmalı.", p:3,s:3},
+
+  ];
+  function allTemplates(){
+    return [...defaultTemplates, ...(state.userTemplates||[])];
+  }
+  function applyTemplate(t){
+    $("cat").value = t.cat;
+    $("loc").value = t.loc || "";
+    $("desc").value = t.desc || "";
+    $("control").value = t.control || "";
+    $("p").value = String(t.p||3);
+    $("s").value = String(t.s||3);
+    updateRiskTag();
+  }
+  $("prefillFromTemplate").addEventListener("click", ()=>{
+    applyTemplate(allTemplates()[0]);
+    toast("Şablon dolduruldu");
+  });
+
+  function renderTemplates(){
+    const box = $("tplList");
+    box.innerHTML = "";
+    allTemplates().forEach((t,i)=>{
+      const div = document.createElement("div");
+      div.className = "k";
+      const score = (t.p||3)*(t.s||3);
+      const lvl = riskLevel(score);
+      div.innerHTML = `
+        <div style="display:flex;gap:10px;align-items:center;justify-content:space-between">
+          <div>
+            <div style="font-weight:1000">${escapeHtml(t.title)}</div>
+            <div class="hint" style="margin-top:4px">${escapeHtml(t.cat)} • Risk önerisi: <b>${score}</b> (${riskText(lvl)})</div>
+          </div>
+          <button class="btn primary" data-i="${i}">Doldur</button>
+        </div>`;
+      div.querySelector("button").addEventListener("click", ()=>{
+        applyTemplate(allTemplates()[i]);
+        setActive("newFinding");
+        toast("Şablon dolduruldu");
+      });
+      box.appendChild(div);
+      box.appendChild(document.createElement("div")).className="hr";
+    });
+    const hrs = box.querySelectorAll(".hr");
+    if(hrs.length) hrs[hrs.length-1].remove();
+  }
+
+  // ===== Photo handling (single image as data URL) =====
+  let pendingPhotoData = "";
+  $("photo").addEventListener("change", async (e)=>{
+    pendingPhotoData = "";
+    const file = e.target.files && e.target.files[0];
+    if(!file) return;
+    if(file.size > 2_200_000){ // ~2.2MB
+      toast("Fotoğraf büyük (2MB+). Küçük seçmen daha iyi.");
+    }
+    pendingPhotoData = await readAsDataURL(file, 1100);
+    toast("Fotoğraf eklendi");
+  });
+  function readAsDataURL(file, maxWidth){
+    return new Promise((resolve, reject)=>{
+      const img = new Image();
+      const reader = new FileReader();
+      reader.onload = ()=>{ img.src = reader.result; };
+      reader.onerror = ()=>reject(reader.error);
+      img.onload = ()=>{
+        // downscale
+        const w = img.width, h = img.height;
+        const ratio = Math.min(1, maxWidth / Math.max(1,w));
+        const cw = Math.round(w*ratio), ch = Math.round(h*ratio);
+        const canvas = document.createElement("canvas");
+        canvas.width = cw; canvas.height = ch;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, cw, ch);
+        resolve(canvas.toDataURL("image/jpeg", 0.80));
+      };
+      img.onerror = ()=>resolve(reader.result); // fallback
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // ===== Save finding =====
+  function clearFindingForm(){
+    $("cat").value = "Genel";
+    $("loc").value = "";
+    $("desc").value = "";
+    $("control").value = "";
+    $("p").value = "3";
+    $("s").value = "3";
+    $("owner").value = "";
+    $("due").value = "";
+    $("photo").value = "";
+    pendingPhotoData = "";
+    updateRiskTag();
+  }
+  $("clearFinding").addEventListener("click", ()=>{
+    clearFindingForm();
+    toast("Form temizlendi");
+  });
+
+  $("saveFinding").addEventListener("click", ()=>{
+    pullMeta();
+    const cat = $("cat").value;
+    const loc = $("loc").value.trim();
+    const desc = $("desc").value.trim();
+    const control = $("control").value.trim();
+    const p = Number($("p").value);
+    const s = Number($("s").value);
+    const owner = $("owner").value.trim();
+    const due = $("due").value || "";
+
+    if(!desc){ toast("Bulgu tanımı boş olamaz"); return; }
+
+    const score = p*s;
+    const lvl = riskLevel(score);
+    // Termin boşsa risk seviyesine göre öneri (düzenlenebilir)
+    let dueSmart = due;
+    if(!dueSmart){
+      const t = todayISO();
+      if(lvl==='high') dueSmart = t;
+      else if(lvl==='mid') dueSmart = addDays(t, 7);
+      else dueSmart = addDays(t, 30);
+    }
+    const now = new Date().toISOString();
+
+    state.findings.unshift({
+      id: uid(),
+      createdAt: now,
+      updatedAt: now,
+      meta: {...state.meta},
+      cat, loc, desc, control,
+      p, s, score, level: lvl,
+      owner, due: dueSmart,
+      status: "open",
+      photo: pendingPhotoData || ""
+    });
+    save();
+    renderRecent();
+    renderDashboard();
+    toast("Kaydedildi");
+    // keep category/risk; clear text/loc/photo
+    $("loc").value="";
+    $("desc").value="";
+    $("control").value="";
+    $("photo").value="";
+    pendingPhotoData = "";
+  });
+
+  // ===== Recent list =====
+  function cardFinding(f){
+    const overdue = isOverdue(f.due, f.status);
+    const dueTxt = f.due ? `${f.due}${overdue ? " (gecikmiş)" : ""}` : "-";
+    const cls = f.level==="high" ? "risk-high" : (f.level==="mid" ? "risk-mid" : "risk-low");
+    const hasPhoto = !!f.photo;
+    return `
+      <div class="k">
+        <div style="display:flex;gap:10px;align-items:flex-start;justify-content:space-between">
+          <div>
+            <div class="row" style="gap:8px">
+              <span class="tag ${cls}">Risk ${f.score} • ${riskText(f.level)}</span>
+              <span class="badge">${escapeHtml(f.cat)}</span>
+              ${hasPhoto ? '<span class="badge">📷 foto</span>' : ''}
+            </div>
+            <div style="font-weight:1000;margin-top:8px">${escapeHtml(shorten(f.desc,110))}</div>
+            <div class="hint" style="margin-top:6px">
+              📍 ${escapeHtml(f.loc||"-")} • 👤 ${escapeHtml(f.owner||"-")} • ⏳ ${escapeHtml(dueTxt)}
+            </div>
+            ${f.control ? `<div class="hint" style="margin-top:10px"><b>Önlem:</b> ${escapeHtml(shorten(f.control,170))}</div>` : ``}
+            ${hasPhoto ? `<div style="margin-top:10px"><img alt="bulgu foto" src="${f.photo}" style="max-width:100%;border-radius:16px;border:1px solid var(--line)"></div>` : ``}
+          </div>
+          <div class="row">
+            <button class="btn" data-act="toggle" data-id="${f.id}">${f.status==="done"?"Aç":"Kapat"}</button>
+            <button class="btn danger" data-act="del" data-id="${f.id}">Sil</button>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  function renderRecent(){
+    const box = $("recent");
+    const list = state.findings.slice(0,5);
+    if(list.length===0){ box.className="hint"; box.textContent="Henüz kayıt yok."; return; }
+    box.className="";
+    box.innerHTML = list.map(cardFinding).join('<div class="hr"></div>');
+    box.querySelectorAll("button").forEach(b=>{
+      b.addEventListener("click", ()=>{
+        const id = b.dataset.id;
+        const act = b.dataset.act;
+        if(act==="del"){
+          if(!confirm("Bu kaydı silmek istiyor musun?")) return;
+          state.findings = state.findings.filter(x=>x.id!==id);
+          save();
+          renderRecent(); renderDashboard(); renderActions();
+          toast("Silindi");
+        }else if(act==="toggle"){
+          const f = state.findings.find(x=>x.id===id);
+          if(!f) return;
+          f.status = (f.status==="done" ? "open" : "done");
+          f.updatedAt = new Date().toISOString();
+          save();
+          renderRecent(); renderDashboard(); renderActions();
+          toast(f.status==="done" ? "Kapandı" : "Açıldı");
+        }
+      });
+    });
+  }
+
+  // ===== Dashboard =====
+  function setBar(el, n, max){
+    const pct = max<=0 ? 0 : (n/max);
+    const h = 20 + Math.round(pct * 64);
+    el.style.height = `${h}px`;
+  }
+  function renderDashboard(){
+    pullMeta();
+
+    const total = state.findings.length;
+    const open = state.findings.filter(f=>f.status!=="done").length;
+    const overdue = state.findings.filter(f=>isOverdue(f.due,f.status)).length;
+    const highOpen = state.findings.filter(f=>f.level==="high" && f.status!=="done").length;
+
+    $("kTotal").textContent = total;
+    $("kOpen").textContent = open;
+    $("kOverdue").textContent = overdue;
+    $("kHigh").textContent = highOpen;
+
+    const low = state.findings.filter(f=>f.level==="low").length;
+    const mid = state.findings.filter(f=>f.level==="mid").length;
+    const high = state.findings.filter(f=>f.level==="high").length;
+    $("nLow").textContent = `${low}`;
+    $("nMid").textContent = `${mid}`;
+    $("nHigh").textContent = `${high}`;
+    const max = Math.max(low, mid, high, 1);
+    setBar($("barLow"), low, max);
+    setBar($("barMid"), mid, max);
+    setBar($("barHigh"), high, max);
+
+    // list open actions
+    const filter = $("dashFilter").value;
+    const sort = $("dashSort").value;
+
+    let items = state.findings.filter(f=>f.status!=="done");
+
+    if(filter==="overdue") items = items.filter(f=>isOverdue(f.due,f.status));
+    if(filter==="next7"){
+      const t = todayISO();
+      const d7 = addDays(t,7);
+      items = items.filter(f=>f.due && f.due>=t && f.due<=d7);
+    }
+    if(filter==="high") items = items.filter(f=>f.level==="high");
+
+    if(sort==="dueAsc"){
+      items.sort((a,b)=> (a.due||"9999-12-31").localeCompare(b.due||"9999-12-31"));
+    }else if(sort==="riskDesc"){
+      items.sort((a,b)=> (b.score - a.score));
+    }else{
+      items.sort((a,b)=> (b.createdAt||"").localeCompare(a.createdAt||""));
+    }
+
+    const list = items.slice(0,7);
+    const box = $("dashList");
+    if(list.length===0){
+      box.className="hint";
+      box.textContent="Bu filtrede gösterilecek açık aksiyon yok.";
+      return;
+    }
+
+    box.className="";
+    box.innerHTML = list.map(f=>{
+      const overdue = isOverdue(f.due,f.status);
+      const cls = f.level==="high" ? "risk-high" : (f.level==="mid" ? "risk-mid" : "risk-low");
+      return `
+        <div class="k">
+          <div style="display:flex;gap:10px;align-items:flex-start;justify-content:space-between">
+            <div>
+              <div class="row" style="gap:8px">
+                <span class="tag ${cls}">Risk ${f.score} • ${riskText(f.level)}</span>
+                <span class="badge">${escapeHtml(f.cat)}</span>
+                ${f.photo ? '<span class="badge">📷</span>' : ''}
+              </div>
+              <div style="font-weight:1000;margin-top:8px">${escapeHtml(shorten(f.desc,120))}</div>
+              <div class="hint" style="margin-top:6px">
+                📍 ${escapeHtml(f.loc||"-")} • 👤 ${escapeHtml(f.owner||"-")} • ⏳ ${f.due ? `${escapeHtml(f.due)}${overdue?" (gecikmiş)":""}`:"-"}
+              </div>
+            </div>
+            <div class="row">
+              <button class="btn" data-id="${f.id}">Kapat</button>
+            </div>
+          </div>
+        </div>`;
+    }).join('<div class="hr"></div>');
+
+    box.querySelectorAll("button").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const id = btn.dataset.id;
+        const f = state.findings.find(x=>x.id===id);
+        if(!f) return;
+        f.status = "done";
+        f.updatedAt = new Date().toISOString();
+        save();
+        renderDashboard(); renderActions(); renderRecent();
+        toast("Aksiyon kapandı");
+      });
+    });
+  }
+
+  $("dashFilter").addEventListener("change", renderDashboard);
+  $("dashSort").addEventListener("change", renderDashboard);
+
+  // ===== Actions table =====
+  function debounce(fn, ms){
+    let t; return (...args)=>{ clearTimeout(t); t=setTimeout(()=>fn(...args), ms); };
+  }
+  function renderActions(){
+    const status = $("fStatus").value;
+    const risk = $("fRisk").value;
+    const q = $("fSearch").value.trim().toLowerCase();
+    const sort = $("fSort").value;
+
+    let items = state.findings.slice();
+
+    if(status==="open") items = items.filter(f=>f.status!=="done");
+    if(status==="done") items = items.filter(f=>f.status==="done");
+
+    if(risk!=="all") items = items.filter(f=>f.level===risk);
+
+    if(q){
+      items = items.filter(f=>{
+        const hay = `${f.cat} ${f.loc} ${f.desc} ${f.owner} ${f.control}`.toLowerCase();
+        return hay.includes(q);
+      });
+    }
+
+    if(sort==="riskDesc") items.sort((a,b)=>b.score-a.score);
+    if(sort==="dueAsc") items.sort((a,b)=>(a.due||"9999-12-31").localeCompare(b.due||"9999-12-31"));
+    if(sort==="newDesc") items.sort((a,b)=>(b.createdAt||"").localeCompare(a.createdAt||""));
+
+    const tbody = $("actionRows");
+    tbody.innerHTML = "";
+    if(items.length===0){
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td colspan="7" style="background:transparent;border:none;color:var(--muted);padding:18px 6px">Kayıt bulunamadı.</td>`;
+      tbody.appendChild(tr);
+      return;
+    }
+
+    items.forEach(f=>{
+      const overdue = isOverdue(f.due,f.status);
+      const cls = f.level==="high" ? "risk-high" : (f.level==="mid" ? "risk-mid" : "risk-low");
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td><span class="tag ${cls}">${f.score} • ${riskText(f.level)}</span></td>
+        <td>${escapeHtml(f.cat)}</td>
+        <td>
+          <div style="font-weight:1000">${escapeHtml(f.loc||"-")}</div>
+          <div class="hint">${escapeHtml(shorten(f.desc,120))}</div>
+        </td>
+        <td>${escapeHtml(f.owner||"-")}</td>
+        <td>${f.due ? `${escapeHtml(f.due)}${overdue ? ' <span class="badge" style="border-color:rgba(255,107,107,.55);color:var(--bad)">gecikmiş</span>' : ''}` : '-'}</td>
+        <td>${f.status==="done" ? '<span class="badge" style="border-color:rgba(49,208,127,.45);color:var(--accent2)">kapalı</span>' : '<span class="badge" style="border-color:rgba(255,204,102,.45);color:var(--warn)">açık</span>'}</td>
+        <td class="nowrap">
+          <button class="btn" data-act="toggle" data-id="${f.id}">${f.status==="done" ? "Aç" : "Kapat"}</button>
+          <button class="btn danger" data-act="del" data-id="${f.id}">Sil</button>
+        </td>`;
+      tbody.appendChild(tr);
+    });
+
+    tbody.querySelectorAll("button").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const id = btn.dataset.id;
+        const act = btn.dataset.act;
+        if(act==="del"){
+          if(!confirm("Bu kaydı silmek istiyor musun?")) return;
+          state.findings = state.findings.filter(x=>x.id!==id);
+          save();
+          renderActions(); renderDashboard(); renderRecent();
+          toast("Silindi");
+        }else{
+          const f = state.findings.find(x=>x.id===id);
+          if(!f) return;
+          f.status = (f.status==="done" ? "open" : "done");
+          f.updatedAt = new Date().toISOString();
+          save();
+          renderActions(); renderDashboard(); renderRecent();
+          toast(f.status==="done" ? "Kapandı" : "Açıldı");
+        }
+      });
+    });
+  }
+  ["fStatus","fRisk","fSort"].forEach(id=>$(id).addEventListener("change", renderActions));
+  $("fSearch").addEventListener("input", debounce(renderActions, 200));
+
+  // ===== Checklists =====
+  const checklists = [
+    { id:"insaat", name:"İnşaat - Genel Saha Kontrolü", items:[
+      {q:"Yüksekte çalışma alanlarında toplu koruma var mı? (korkuluk/kapak/ağ)", note:"Açık kenar, boşluk, merdiven kovası vb."},
+      {q:"İskeleler kontrol edilmiş ve etiketlenmiş mi?", note:"Kurulum sonrası yetkili kontrol + etiket + kayıt"},
+      {q:"Geçici elektrik tesisatı güvenli mi? (RCD/kaçak akım, pano, kablo)", note:"Kablo ezilmesi/sarkması, topraklama, pano kilidi"},
+      {q:"Yürüyüş yolları düzenli mi? (takılma/kayma riski)", note:"Dağınık malzeme, moloz, kablo, ıslak zemin"},
+      {q:"Kaldırma operasyonunda alan izolasyonu var mı?", note:"Yük altı yasak, işaretçi, işaretleme/bariyer"},
+      {q:"Yangın söndürücüler erişilebilir mi?", note:"Erişim 1 m, levha, kontrol tarihi"},
+      {q:"KKD kullanımı işin riskine uygun mu?", note:"Baret, yelek, gözlük, eldiven, kemer vb."},
+      {q:"Merdivenler uygun ve sağlam mı?", note:"Kaydırmaz ayak, açı, sabitleme"},
+      {q:"Sıcak iş (kaynak/taşlama) için önlemler var mı?", note:"Yangın gözcüsü, kıvılcım perdesi, izin prosedürü"},
+    ]},
+    { id:"ofis", name:"Ofis - İSG Kontrolü", items:[
+      {q:"Acil çıkışlar açık ve yönlendirmeler görünür mü?", note:"Kapı önü boş, levha/aydınlatma var"},
+      {q:"Elektrik priz/uzatma kablolarında aşırı yük var mı?", note:"Çoklu priz zinciri yok, kablo hasarı yok"},
+      {q:"Ergonomi uygun mu? (monitör hizası/sandalye/aydınlatma)", note:"Boyun-bilek-belde zorlanma"},
+      {q:"Yangın tüpü ve ilk yardım malzemeleri erişilebilir mi?", note:"Kontrol tarihleri güncel mi?"},
+      {q:"Zemin düzeni uygun mu? (takılma/kayma)", note:"Kablo yönetimi, dağınıklık"},
+    ]},
+    { id:"depo", name:"Depo / İstif - Kontrol", items:[
+      {q:"Raf sistemleri sabit ve hasarsız mı?", note:"Deformasyon, ankraj, yük etiketi"},
+      {q:"İstif güvenli mi? (yükseklik/devrilme)", note:"Aşırı istif yok, bağlama/şeritleme"},
+      {q:"Forklift/yaya yolları ayrılmış mı?", note:"Bariyer/çizgi/ayna/ikaz"},
+      {q:"Elle taşıma için yardımcı ekipman var mı?", note:"Transpalet, kaldırma aparatı"},
+      {q:"Kimyasal depolama uygun mu?", note:"Etiket, MSDS, havalandırma, dökülme kiti"},
+      {q:"Acil durum ekipmanları erişilebilir mi?", note:"Göz duşu, yangın tüpü, exit"},
+    ]},
+,
+{ id:"elektrik_detay", name:"Elektrik - Detay Kontrol", items:[
+  {q:"Kaçak akım röleleri (RCD) uygun ve test edildi mi?", note:"Test butonu / periyodik kontrol"},
+  {q:"Geçici panolar kilitli ve etiketli mi?", note:"Yetkisiz erişim engeli"},
+  {q:"Topraklama ve kablo kesitleri uygun mu?", note:"Gözle kontrol + yetkili ölçüm"},
+  {q:"Kablo ekleri uygunsuz mu? (bant/sök-tak)", note:"Uygun buat ve koruma şart"},
+  {q:"Açıkta iletken/izolesiz nokta var mı?", note:"Derhal izolasyon/onarım"},
+  {q:"Islak/ıslak zeminlerde elektrikli ekipman kontrolü yapıldı mı?", note:"IP koruma ve RCD kritik"},
+  {q:"Priz/uzatma kablolarında aşırı yük var mı?", note:"Zincirleme çoklu priz yok"},
+  {q:"Enerji izolasyonu (LOTO) uygulanıyor mu?", note:"Bakım/temizlik işleri"},
+]},
+{ id:"yuksek", name:"Yüksekte Çalışma - Detay Kontrol", items:[
+  {q:"Açık kenar/boşluklarda korkuluk/kapak mevcut mu?", note:"Etek tahtası + ara korkuluk"},
+  {q:"Yaşam hattı/ankraj noktaları uygun mu?", note:"Sertifikalı ve yerinde kontrol"},
+  {q:"Kemer bağlantısı doğru yapılıyor mu?", note:"Şok emici + uygun kanca"},
+  {q:"Merdiven/erişim ekipmanı uygun mu?", note:"Açı, sabitleme, kaydırmaz ayak"},
+  {q:"Düşen cisim riski için alan izolasyonu var mı?", note:"Bariyer + uyarı levhası"},
+  {q:"Hava şartları (rüzgar/yağış) takip ediliyor mu?", note:"Gerekirse işi durdur"},
+  {q:"İskele/platform günlük kontrolü yapıldı mı?", note:"Etiket + kayıt"},
+]},
+{ id:"makine", name:"Makine - Koruyucu / LOTO Kontrol", items:[
+  {q:"Makine koruyucuları takılı ve çalışır mı?", note:"Muhafaza/switch devre dışı değil"},
+  {q:"Acil stoplar erişilebilir ve test edildi mi?", note:"Periyodik test önerilir"},
+  {q:"Bakım/temizlikte LOTO uygulanıyor mu?", note:"Kilitle-etiketle ve doğrulama"},
+  {q:"Dönen aksam/aktarma organları korunmuş mu?", note:"Kaplin, kayış-kasnak vb."},
+  {q:"Yetkisiz kullanım engellenmiş mi?", note:"Anahtar kontrolü/izinsiz çalıştırma"},
+]},
+{ id:"yangin_detay", name:"Yangın - Detay Kontrol", items:[
+  {q:"Yangın söndürücüler doğru tip ve erişilebilir mi?", note:"Konum, levha, kontrol tarihi"},
+  {q:"Acil çıkışlar açık ve kilitsiz mi?", note:"Tahliye yolu sürekli açık"},
+  {q:"Elektrik panoları çevresi temiz mi?", note:"Yanıcı birikim yok"},
+  {q:"Sıcak iş izin süreci uygulanıyor mu?", note:"Gözcü + kıvılcım önlemi"},
+  {q:"Toplanma alanı ve acil iletişim biliniyor mu?", note:"Saha bilgilendirme"},
+]},
+{ id:"kimyasal_detay", name:"Kimyasal - Depolama / Maruziyet Kontrol", items:[
+  {q:"Tüm kimyasallar etiketli ve MSDS erişilebilir mi?", note:"Güncel MSDS"},
+  {q:"Uyumsuz kimyasallar ayrı depolanıyor mu?", note:"Asit-baz/oksitleyici vb."},
+  {q:"Havalandırma yeterli mi?", note:"Kapalı alanlarda kritik"},
+  {q:"Dökülme kiti ve göz duşu hazır mı?", note:"Müdahale ekipmanı"},
+  {q:"Atık yönetimi uygun mu?", note:"Etiket, kapalı kutu, prosedür"},
+]}
+
+  ];
+
+  function clKey(id){ return state.checklist[id] || (state.checklist[id]={}); }
+
+  function checklistSummary(id){
+    const c = checklists.find(x=>x.id===id);
+    const a = clKey(id);
+    const keys = Object.keys(a);
+    let ok=0, bad=0, na=0;
+    keys.forEach(k=>{
+      if(a[k]==="ok") ok++;
+      if(a[k]==="bad") bad++;
+      if(a[k]==="na") na++;
+    });
+    return {ok,bad,na,total: c.items.length};
+  }
+
+  function renderChecklistItems(id){
+    const c = checklists.find(x=>x.id===id) || checklists[0];
+    const answers = clKey(c.id);
+    const query = $("clSearch").value.trim().toLowerCase();
+
+    const box = $("clItems");
+    box.innerHTML = "";
+
+    const filtered = c.items
+      .map((it, idx)=>({it, idx}))
+      .filter(x=>{
+        if(!query) return true;
+        return (`${x.it.q} ${x.it.note||""}`.toLowerCase()).includes(query);
+      });
+
+    if(filtered.length===0){
+      box.innerHTML = `<div class="hint">Aramaya uygun madde bulunamadı.</div>`;
+      return;
+    }
+
+    filtered.forEach(({it, idx})=>{
+      const v = answers[idx] || "ok";
+      const div = document.createElement("div");
+      div.className = "k";
+      div.innerHTML = `
+        <div style="display:flex;gap:10px;align-items:flex-start;justify-content:space-between">
+          <div>
+            <div style="font-weight:1000">${idx+1}. ${escapeHtml(it.q)}</div>
+            <div class="hint">${escapeHtml(it.note||"")}</div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end">
+            <button class="btn ${v==='ok'?'good':''}" data-v="ok" data-i="${idx}">Uygun</button>
+            <button class="btn ${v==='na'?'primary':''}" data-v="na" data-i="${idx}">Uygulanmaz</button>
+            <button class="btn ${v==='bad'?'danger':''}" data-v="bad" data-i="${idx}">Uygunsuz</button>
+          </div>
+        </div>`;
+      div.querySelectorAll("button").forEach(b=>{
+        b.addEventListener("click", ()=>{
+          answers[idx] = b.dataset.v;
+          save();
+          renderChecklistItems(c.id);
+        });
+      });
+      box.appendChild(div);
+      box.appendChild(document.createElement("div")).className="hr";
+    });
+
+    const hrs = box.querySelectorAll(".hr");
+    if(hrs.length) hrs[hrs.length-1].remove();
+  }
+
+  function renderChecklists(){
+    const sel = $("clSelect");
+    sel.innerHTML = "";
+    checklists.forEach(c=>{
+      const o = document.createElement("option");
+      o.value=c.id; o.textContent=c.name;
+      sel.appendChild(o);
+    });
+
+    const last = state.meta.lastChecklist || checklists[0].id;
+    sel.value = last;
+    renderChecklistItems(last);
+    renderTemplates();
+
+    sel.onchange = ()=>{
+      state.meta.lastChecklist = sel.value;
+      save();
+      renderChecklistItems(sel.value);
+    };
+  }
+
+  $("clSearch").addEventListener("input", debounce(()=>renderChecklistItems($("clSelect").value), 180));
+
+  $("resetChecklist").addEventListener("click", ()=>{
+    const id = $("clSelect").value;
+    if(!confirm("Bu kontrol listesindeki işaretlemeleri sıfırlamak istiyor musun?")) return;
+    state.checklist[id] = {};
+    save();
+    renderChecklistItems(id);
+    toast("Liste sıfırlandı");
+  });
+
+  $("quickSummary").addEventListener("click", ()=>{
+    const id = $("clSelect").value;
+    const s = checklistSummary(id);
+    toast(`Özet: Uygun ${s.ok} • Uygunsuz ${s.bad} • Uygulanmaz ${s.na}`);
+  });
+
+  $("addFailedToFindings").addEventListener("click", ()=>{
+    pullMeta();
+    const id = $("clSelect").value;
+    const c = checklists.find(x=>x.id===id);
+    const answers = clKey(id);
+    const badIdx = Object.keys(answers).filter(k=>answers[k]==="bad").map(Number);
+    if(!badIdx.length){ toast("Uygunsuz işaretli madde yok"); return; }
+
+    let added = 0;
+    badIdx.forEach(idx=>{
+      const it = c.items[idx];
+      const now = new Date().toISOString();
+      const desc = `[Kontrol Listesi] ${c.name} / Madde ${idx+1}: ${it.q} (${it.note||""})`.trim();
+      const p=3, s=3, score=p*s;
+      state.findings.unshift({
+        id: uid(),
+        createdAt: now,
+        updatedAt: now,
+        meta: {...state.meta},
+        cat: "Kontrol Listesi",
+        loc: state.meta.siteDept || "",
+        desc,
+        control: "Uygunsuzluk giderilene kadar aksiyon planı oluştur ve sorumlu ata.",
+        p,s,score,level:riskLevel(score),
+        owner:"",
+        due:"",
+        status:"open",
+        photo:""
+      });
+      added++;
+    });
+
+    save();
+    renderDashboard();
+    renderRecent();
+    toast(`${added} madde bulguya eklendi`);
+  });
+
+  // ===== Tools: Toolbox talk =====
+  const TOOLBOX_BANK = {
+    "Yüksekte Çalışma":[
+      "Toplu koruma (korkuluk/kapak/ağ) kontrol edildi mi?",
+      "Emniyet kemeri bağlantı noktası uygun mu (ankraj)?",
+      "Hava şartları (rüzgar/yağış) değerlendirmesi yapıldı mı?",
+      "Düşen cisim riski için alan izolasyonu var mı?",
+      "Merdiven/iskeleden güvenli iniş-çıkış sağlandı mı?"
+    ],
+    "Elektrik":[
+      "Geçici panolar kilitli ve kaçak akım rölesi (RCD) çalışır mı?",
+      "Kablolarda ezilme, ek, izolasyon hasarı var mı?",
+      "Enerji izolasyonu/LOTO ihtiyacı var mı?",
+      "Yetkisiz müdahaleyi engelleyen önlem var mı?",
+      "Islak alanda elektrikli ekipman kullanımı kontrol edildi mi?"
+    ],
+    "Elle Taşıma":[
+      "Yük ağırlığı/mesafe/pozisyon değerlendirildi mi?",
+      "Uygun ekipman (transpalet, el arabası) kullanılıyor mu?",
+      "Bel-bacak tekniği hatırlatıldı mı (dizden güç alma)?",
+      "Tek kişi yerine ekip taşıması gerekir mi?",
+      "Zemin ve geçiş yolu uygun mu?"
+    ],
+    "Kaldırma Operasyonları":[
+      "Sapan/aksesuarların durumu uygun mu (etiket, yıpranma)?",
+      "Alan izolasyonu ve işaretçi/gözcü var mı?",
+      "Yük altına girilmeme kuralı hatırlatıldı mı?",
+      "Rüzgar/denge/bağlama noktaları kontrol edildi mi?",
+      "Operatör yetkinliği ve izinler uygun mu?"
+    ],
+    "Kimyasal":[
+      "Etiket ve MSDS erişimi var mı?",
+      "Uygun KKD (gözlük, eldiven, maske) seçildi mi?",
+      "Havalandırma ve dökülme kiti hazır mı?",
+      "Uyumsuz kimyasal birlikte depolanmıyor mu?",
+      "Atık/boş ambalaj yönetimi konuşuldu mu?"
+    ],
+    "Yangın":[
+      "Sıcak iş varsa izin ve önlemler tamam mı?",
+      "Yangın tüpü erişimi açık mı, kontrol tarihi güncel mi?",
+      "Acil çıkışlar açık mı, toplanma alanı biliniyor mu?",
+      "Sigara alanı ve kıvılcım kaynakları kontrol edildi mi?",
+      "Elektrik/yanıcı malzeme kaynaklı riskler gözden geçirildi mi?"
+    ],
+    "İskele / Platform":[
+      "Kurulum sonrası yetkili kontrol ve etiket var mı?",
+      "Taban, ankraj, çapraz bağlantılar uygun mu?",
+      "Platform üzeri düzenli mi (malzeme düşme riski)?",
+      "Güvenli erişim (merdiven/kapı) sağlandı mı?",
+      "Hava şartlarına göre kullanım uygun mu?"
+    ],
+    "Genel Saha Disiplini":[
+      "Yürüyüş yolları ve düzen (5S) kontrol edildi mi?",
+      "KKD kullanımı işin riskine uygun mu?",
+      "Alan izolasyonu/uyarı levhaları yeterli mi?",
+      "Yeni başlayanlara sahaya özel riskler anlatıldı mı?",
+      "Gözlemlenen tehlike anında bildirilecek mi?"
+    ]
+  };
+
+  function renderTools(){
+    $("thrLow").value = state.thresholds.lowMax;
+    $("thrMid").value = state.thresholds.midMax;
+    updateQuickRisk();
+  }
+
+  function genToolboxText(topic, note){
+    const meta = state.meta || {};
+    const site = meta.siteName || "-";
+    const dept = meta.siteDept || "-";
+    const date = meta.siteDate || todayISO();
+    const points = (TOOLBOX_BANK[topic] || TOOLBOX_BANK["Genel Saha Disiplini"]).slice();
+    const extra = note ? `Ek not: ${note}` : "";
+    return [
+      `TOOLBOX TALK (5 dk) • ${date}`,
+      `İşyeri/Şantiye: ${site} • Birim: ${dept}`,
+      `Konu: ${topic}`,
+      "",
+      "Bugün hatırlatmalar:",
+      ...points.map(p=>`• ${p}`),
+      extra ? `• ${extra}` : "",
+      "",
+      "Katılım: Ad Soyad / İmza"
+    ].filter(Boolean).join("\n");
+  }
+
+  $("genToolbox").addEventListener("click", ()=>{
+    pullMeta();
+    const topic = $("tbTopic").value;
+    const note = $("tbNote").value.trim();
+    $("tbOut").value = genToolboxText(topic, note);
+    toast("Toolbox metni hazır");
+  });
+  $("copyToolbox").addEventListener("click", async ()=>{
+    try{
+      await navigator.clipboard.writeText($("tbOut").value || "");
+      toast("Kopyalandı");
+    }catch(e){
+      toast("Kopyalama engellendi");
+    }
+  });
+
+  // Threshold actions
+  $("saveThresholds").addEventListener("click", ()=>{
+    const lowMax = clamp(Number($("thrLow").value||DEFAULT_THRESH.lowMax),1,25);
+    const midMax = clamp(Number($("thrMid").value||DEFAULT_THRESH.midMax),1,25);
+    if(midMax < lowMax){ toast("Orta max, düşük max'tan küçük olamaz"); return; }
+    state.thresholds.lowMax = lowMax;
+    state.thresholds.midMax = midMax;
+    save();
+    updateRiskTag();
+    updateQuickRisk();
+    renderDashboard();
+    toast("Eşikler kaydedildi");
+  });
+  $("resetThresholds").addEventListener("click", ()=>{
+    state.thresholds = {...DEFAULT_THRESH};
+    save();
+    renderTools();
+    updateRiskTag();
+    renderDashboard();
+    toast("Varsayılan eşikler");
+  });
+
+  // ===== Export/Import =====
+  function serialize(){ return JSON.stringify(state, null, 2); }
+  function renderExportPreview(){ $("exportPreview").value = serialize(); }
+
+  function downloadBlob(blob, filename){
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url), 1000);
+  }
+  function csvEscape(v){
+    const s = String(v ?? "");
+    if(/[",\n]/.test(s)) return `"${s.replace(/"/g,'""')}"`;
+    return s;
+  }
+
+  $("exportJson").addEventListener("click", ()=>{
+    const blob = new Blob([serialize()], {type:"application/json"});
+    downloadBlob(blob, `isg-yedek-${todayISO()}.json`);
+    toast("JSON indirildi");
+  });
+  $("exportCsv").addEventListener("click", ()=>{
+    const rows = [
+      ["id","createdAt","status","score","level","cat","loc","desc","control","owner","due","siteName","siteDept","auditor","siteDate"]
+    ];
+    state.findings.forEach(f=>{
+      rows.push([
+        f.id, f.createdAt, f.status, f.score, f.level, f.cat, f.loc, f.desc, f.control, f.owner, f.due,
+        (f.meta&&f.meta.siteName)||"", (f.meta&&f.meta.siteDept)||"", (f.meta&&f.meta.auditor)||"", (f.meta&&f.meta.siteDate)||""
+      ]);
+    });
+    const csv = rows.map(r=>r.map(cell=>csvEscape(cell)).join(",")).join("\n");
+    const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
+    downloadBlob(blob, `isg-aksiyonlar-${todayISO()}.csv`);
+    toast("CSV indirildi");
+  });
+  $("copyJson").addEventListener("click", async ()=>{
+    try{
+      await navigator.clipboard.writeText(serialize());
+      toast("JSON kopyalandı");
+    }catch(e){
+      toast("Kopyalama engellendi");
+    }
+  });
+
+  $("importJson").addEventListener("click", ()=>{
+    const txt = $("importBox").value.trim();
+    if(!txt){ toast("JSON boş"); return; }
+    let incoming;
+    try{ incoming = JSON.parse(txt); }catch(e){ toast("JSON okunamadı"); return; }
+    if(!incoming || typeof incoming!=="object"){ toast("Geçersiz JSON"); return; }
+
+    if(!incoming.meta) incoming.meta = {};
+    if(!incoming.brand) incoming.brand = {};
+    if(!incoming.thresholds) incoming.thresholds = {...DEFAULT_THRESH};
+    if(!Array.isArray(incoming.findings)) incoming.findings = [];
+    if(!incoming.checklist) incoming.checklist = {};
+    if(!Array.isArray(incoming.userTemplates)) incoming.userTemplates = [];
+
+    // merge meta (keep current if filled)
+    state.meta = {...incoming.meta, ...state.meta};
+    state.brand = {...incoming.brand, ...state.brand};
+    state.thresholds = {...incoming.thresholds, ...state.thresholds};
+
+    // merge findings by id
+    const existing = new Set(state.findings.map(f=>f.id));
+    let added=0;
+    incoming.findings.forEach(f=>{
+      if(!f || !f.id) return;
+      if(existing.has(f.id)) return;
+      state.findings.push(f);
+      added++;
+    });
+
+    // merge checklist
+    state.checklist = {...incoming.checklist, ...state.checklist};
+
+    // merge templates (by id)
+    const tplExisting = new Set((state.userTemplates||[]).map(t=>t.id));
+    incoming.userTemplates.forEach(t=>{
+      if(!t || !t.id) return;
+      if(tplExisting.has(t.id)) return;
+      state.userTemplates.push(t);
+    });
+
+    // normalize
+    state.findings.sort((a,b)=>(b.createdAt||"").localeCompare(a.createdAt||""));
+
+    save();
+    syncMeta();
+    applyExpertToHeader();
+    renderDashboard(); renderRecent(); renderActions(); renderExportPreview();
+    toast(`${added} kayıt içe aktarıldı`);
+  });
+
+  $("wipeAll").addEventListener("click", ()=>{
+    if(!confirm("Tüm kayıtlar silinecek. Emin misin?")) return;
+    localStorage.removeItem(KEY);
+    state = load(); // will return defaults
+    syncMeta();
+    applyExpertToHeader();
+    clearFindingForm();
+    renderDashboard(); renderRecent(); renderActions(); renderExportPreview();
+    toast("Tüm kayıtlar silindi");
+  });
+
+  // ===== Settings (Brand + Templates) =====
+  function renderSettings(){
+    // Expert
+    const ex = (state.meta && state.meta.expert) ? state.meta.expert : {};
+    if($("expName")) $("expName").value = ex.name || "";
+    if($("expClass")) $("expClass").value = (ex.cls || "B").toUpperCase();
+    if($("expCert")) $("expCert").value = ex.cert || "";
+    if($("expOrg")) $("expOrg").value = ex.org || "";
+    if($("expContact")) $("expContact").value = ex.contact || "";
+
+    $("brandTitle").value = state.brand.title || "";
+    // logo is file input; can't set value
+    // templates inputs
+    $("tName").value = "";
+    $("tCat").value = "";
+    $("tDesc").value = "";
+    $("tCtrl").value = "";
+    $("tP").value = "3";
+    $("tS").value = "3";
+    renderUserTplList();
+    renderTemplates();
+  }
+
+  async function readLogo(file){
+    if(!file) return "";
+    return await readAsDataURL(file, 220);
+  }
+
+
+  // Expert save/clear
+  function pullExpertFromSettings(){
+    if(!state.meta) state.meta = {};
+    if(!state.meta.expert) state.meta.expert = {};
+    state.meta.expert.name = ($("expName")?.value || "").trim();
+    state.meta.expert.cls  = ($("expClass")?.value || "B").trim().toUpperCase();
+    state.meta.expert.cert = ($("expCert")?.value || "").trim();
+    state.meta.expert.org  = ($("expOrg")?.value || "").trim();
+    state.meta.expert.contact = ($("expContact")?.value || "").trim();
+    save();
+    applyExpertToHeader();
+  }
+  $("saveExpert")?.addEventListener("click", ()=>{
+    pullExpertFromSettings();
+    toast("Uzman bilgileri kaydedildi");
+  });
+  $("clearExpert")?.addEventListener("click", ()=>{
+    if(!state.meta) state.meta = {};
+    state.meta.expert = {};
+    save();
+    renderSettings();
+    applyExpertToHeader();
+    toast("Uzman bilgileri temizlendi");
+  });
+
+  $("saveBrand").addEventListener("click", async ()=>{
+    const title = $("brandTitle").value.trim();
+    const file = $("brandLogo").files && $("brandLogo").files[0];
+    const logo = file ? await readLogo(file) : (state.brand.logo || "");
+    state.brand = { title, logo };
+    save();
+    applyBrand();
+    toast("Kaydedildi");
+  });
+
+  $("clearBrand").addEventListener("click", ()=>{
+    state.brand = {};
+    save();
+    applyBrand();
+    $("brandTitle").value = "";
+    $("brandLogo").value = "";
+    toast("Temizlendi");
+  });
+
+  function renderUserTplList(){
+    const box = $("userTplList");
+    const list = state.userTemplates || [];
+    if(!list.length){
+      box.className="hint";
+      box.textContent="Henüz özel şablon yok.";
+      return;
+    }
+    box.className="";
+    box.innerHTML = list.map(t=>{
+      const score = (t.p||3)*(t.s||3);
+      return `
+        <div class="k">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+            <div>
+              <div style="font-weight:1000">${escapeHtml(t.title)}</div>
+              <div class="hint">${escapeHtml(t.cat)} • Risk: ${score}</div>
+            </div>
+            <button class="btn danger" data-del="${t.id}">Sil</button>
+          </div>
+        </div>`;
+    }).join('<div class="hr"></div>');
+
+    box.querySelectorAll("button").forEach(b=>{
+      b.addEventListener("click", ()=>{
+        const id = b.dataset.del;
+        if(!confirm("Bu şablonu silmek istiyor musun?")) return;
+        state.userTemplates = (state.userTemplates||[]).filter(x=>x.id!==id);
+        save();
+        renderUserTplList();
+        renderTemplates();
+        toast("Şablon silindi");
+      });
+    });
+  }
+
+  $("addTemplate").addEventListener("click", ()=>{
+    const title = $("tName").value.trim();
+    const cat = $("tCat").value.trim() || "Genel";
+    const desc = $("tDesc").value.trim();
+    const control = $("tCtrl").value.trim();
+    const p = Number($("tP").value);
+    const s = Number($("tS").value);
+
+    if(!title || !desc){
+      toast("Şablon adı ve bulgu gerekli");
+      return;
+    }
+    const t = { id: uid(), title, cat, loc:"", desc, control, p, s };
+    state.userTemplates.unshift(t);
+    save();
+    renderUserTplList();
+    renderTemplates();
+    toast("Şablon eklendi");
+    $("tName").value="";
+    $("tCat").value="";
+    $("tDesc").value="";
+    $("tCtrl").value="";
+    $("tP").value="3";
+    $("tS").value="3";
+  });
+
+  $("resetTemplates").addEventListener("click", ()=>{
+    if(!confirm("Özel şablonları temizleyip varsayılanlara dönmek istiyor musun?")) return;
+    state.userTemplates = [];
+    save();
+    renderUserTplList();
+    renderTemplates();
+    toast("Varsayılan şablonlar");
+  });
+
+  function applyBrand(){
+    // Update header title if provided
+    const title = state.brand && state.brand.title ? state.brand.title : "İSG Saha Asistanı • Pro";
+    document.title = title;
+    document.querySelector(".title h1").textContent = title;
+
+    // Update logo if provided
+    const logoEl = document.querySelector(".logo");
+    if(state.brand && state.brand.logo){
+      logoEl.style.background = `url(${state.brand.logo}) center/cover no-repeat`;
+    }else{
+      logoEl.style.background = "linear-gradient(135deg, rgba(122,167,255,.95), rgba(49,208,127,.9))";
+    }
+  }
+
+  // ===== Print / PDF =====
+  function printReport(){
+    pullMeta();
+    const w = window.open("", "_blank");
+    const meta = state.meta||{};
+    const rows = state.findings.slice().sort((a,b)=>(b.createdAt||"").localeCompare(a.createdAt||""));
+    const brandTitle = (state.brand && state.brand.title) ? state.brand.title : "İSG Saha Asistanı";
+    const sig = "Fatih AKDENİZ  |  İŞ GÜVENLİĞİ UZMANI (B)  |  HAZIRLAYAN";
+
+    const html = `
+<!doctype html><html lang="tr"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>İSG Rapor</title>
+<style>
+  body{font-family:Arial, sans-serif;margin:24px;color:#111}
+  h1{margin:0 0 6px 0;font-size:18px}
+  .sub{color:#444;margin-bottom:14px}
+  .box{border:1px solid #ddd;border-radius:10px;padding:12px;margin:10px 0}
+  table{width:100%;border-collapse:collapse;margin-top:10px}
+  th,td{border:1px solid #ddd;padding:8px;font-size:12px;vertical-align:top}
+  th{background:#f5f5f5}
+  .tag{display:inline-block;padding:2px 8px;border-radius:999px;font-weight:700;font-size:11px;border:1px solid #ddd}
+  .low{background:#e8fff1}
+  .mid{background:#fff6e6}
+  .high{background:#ffe8e8}
+  .sig{margin-top:14px;font-size:12px;color:#333}
+  img{max-width:180px;max-height:120px;border:1px solid #ddd;border-radius:8px}
+  @media print{ button{display:none} }
+</style>
+</head><body>
+  <h1>${escapeHtml(brandTitle)} - Bulgu / Aksiyon Raporu</h1>
+  <div class="sub">${escapeHtml(meta.siteName||"-")} • ${escapeHtml(meta.siteDept||"-")} • Tarih: ${escapeHtml(meta.siteDate||todayISO())}</div>
+  <div class="box">
+    <b>Denetimi Yapan:</b> ${escapeHtml(meta.auditor||"-")}<br/>
+    <b>Toplam Bulgu:</b> ${rows.length} • <b>Açık:</b> ${rows.filter(r=>r.status!=="done").length} • <b>Gecikmiş:</b> ${rows.filter(r=>isOverdue(r.due,r.status)).length}
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Durum</th><th>Risk</th><th>Kategori</th><th>Lokasyon</th><th>Bulgu</th><th>Öneri</th><th>Sorumlu</th><th>Termin</th><th>Foto</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${rows.map(r=>{
+        const cls = r.level==="high"?"high":(r.level==="mid"?"mid":"low");
+        const st = r.status==="done"?"Kapalı":"Açık";
+        const img = r.photo ? `<img alt="foto" src="${r.photo}"/>` : "";
+        return `<tr>
+          <td>${st}</td>
+          <td><span class="tag ${cls}">${r.score} • ${riskText(r.level)}</span></td>
+          <td>${escapeHtml(r.cat||"")}</td>
+          <td>${escapeHtml(r.loc||"")}</td>
+          <td>${escapeHtml(r.desc||"")}</td>
+          <td>${escapeHtml(r.control||"")}</td>
+          <td>${escapeHtml(r.owner||"")}</td>
+          <td>${escapeHtml(r.due||"")}</td>
+          <td>${img}</td>
+        </tr>`;
+      }).join("")}
+    </tbody>
+  </table>
+
+  <div class="sig"><b>${escapeHtml(sig)}</b></div>
+  <button onclick="window.print()">Yazdır / PDF</button>
+</body></html>`;
+    w.document.open();
+    w.document.write(html);
+    w.document.close();
+  }
+
+  // ===== Dashboard quick nav =====
+  $("goNewFinding").addEventListener("click", ()=>setActive("newFinding"));
+  $("goChecklists").addEventListener("click", ()=>setActive("checklists"));
+
+  
+// ===== Near Miss (Ramak Kala) =====
+let nmPhotoData = "";
+$("nmPhoto").addEventListener("change", async (e)=>{
+  nmPhotoData = "";
+  const file = e.target.files && e.target.files[0];
+  if(!file) return;
+  nmPhotoData = await readAsDataURL(file, 1100);
+  toast("Fotoğraf eklendi");
+});
+
+function clearNearMissForm(){
+  $("nmDate").value = todayISO();
+  $("nmLoc").value = "";
+  $("nmDesc").value = "";
+  $("nmCons").value = "İlk yardım gerektirmeyen";
+  $("nmType").value = "Diğer";
+  $("nmImmediate").value = "";
+  $("nmRoot").value = "";
+  $("nmOwner").value = "";
+  $("nmDue").value = "";
+  $("nmPhoto").value = "";
+  nmPhotoData = "";
+}
+$("clearNearMiss").addEventListener("click", ()=>{
+  clearNearMissForm(); toast("Form temizlendi");
+});
+
+
+  // ===== Notes =====
+  function syncNoteForm(){
+    $("noteDate").value = todayISO();
+    $("noteTag").value = "";
+    $("noteTitle").value = "";
+    $("noteBody").value = "";
+  }
+  function renderNotes(){
+    if(!$("noteDate")) return;
+    if(!$("noteDate").value) $("noteDate").value = todayISO();
+
+    const list = $("noteRecent");
+    const items = (state.notes || []).slice().sort((a,b)=> (b.date||"").localeCompare(a.date||"") || (b.createdAt||"").localeCompare(a.createdAt||""));
+    if(!items.length){
+      list.innerHTML = "Henüz not yok.";
+      list.className = "hint";
+      return;
+    }
+    list.className = "";
+    list.innerHTML = "";
+    items.slice(0,25).forEach(n=>{
+      const box = document.createElement("div");
+      box.className = "k";
+      box.innerHTML = `
+        <div style="display:flex;gap:10px;align-items:flex-start;justify-content:space-between">
+          <div style="min-width:0">
+            <div style="font-weight:1000">${escapeHtml(n.title||"(Başlıksız)")}</div>
+            <div class="hint" style="margin-top:4px">${escapeHtml(n.date||"")} ${n.tag?("• "+escapeHtml(n.tag)):""}</div>
+            <div class="hint" style="margin-top:8px;white-space:pre-wrap">${escapeHtml(n.body||"")}</div>
+          </div>
+          <button class="btn danger" data-id="${escapeHtml(n.id)}">Sil</button>
+        </div>`;
+      box.querySelector("button").addEventListener("click", ()=>{
+        state.notes = (state.notes||[]).filter(x=>x.id!==n.id);
+        save();
+        renderNotes();
+        toast("Not silindi");
+      });
+      list.appendChild(box);
+      list.appendChild(document.createElement("div")).className="hr";
+    });
+    const hrs = list.querySelectorAll(".hr");
+    if(hrs.length) hrs[hrs.length-1].remove();
+  }
+
+  $("saveNote")?.addEventListener("click", ()=>{
+    const date = $("noteDate").value || todayISO();
+    const tag  = $("noteTag").value.trim();
+    const title= $("noteTitle").value.trim();
+    const body = $("noteBody").value.trim();
+    if(!body && !title){ toast("Not boş olamaz"); return; }
+    const n = { id: uid(), date, tag, title, body, createdAt: new Date().toISOString() };
+    state.notes = state.notes || [];
+    state.notes.push(n);
+    save();
+    renderNotes();
+    toast("Not kaydedildi");
+  });
+  $("clearNote")?.addEventListener("click", ()=>{ syncNoteForm(); toast("Temizlendi"); });
+  $("copyNote")?.addEventListener("click", async ()=>{
+    const txt = `Tarih: ${$("noteDate").value||todayISO()}\nEtiket: ${$("noteTag").value.trim()}\nBaşlık: ${$("noteTitle").value.trim()}\n\n${$("noteBody").value}`;
+    try{ await navigator.clipboard.writeText(txt); toast("Kopyalandı"); }catch(e){ toast("Kopyalama engellendi"); }
+  });
+  $("printNotes")?.addEventListener("click", ()=>{ window.print(); });
+
+$("saveNearMiss").addEventListener("click", ()=>{
+  pullMeta();
+  const date = $("nmDate").value || todayISO();
+  const loc = $("nmLoc").value.trim();
+  const desc = $("nmDesc").value.trim();
+  const cons = $("nmCons").value;
+  const type = $("nmType").value;
+  const immediate = $("nmImmediate").value.trim();
+  const root = $("nmRoot").value.trim();
+  const owner = $("nmOwner").value.trim();
+  let due = $("nmDue").value || "";
+  if(!desc){ toast("Olay tanımı boş olamaz"); return; }
+  if(!due){ due = addDays(date, 7); } // default follow-up 7 gün
+  const now = new Date().toISOString();
+  state.nearMisses.unshift({
+    id: uid(), createdAt: now, updatedAt: now,
+    meta: {...state.meta},
+    date, loc, desc, cons, type, immediate, root, owner, due,
+    status: "open",
+    photo: nmPhotoData || ""
+  });
+  save();
+  renderNearMissRecent();
+  renderDashboard();
+  toast("Kaydedildi");
+  // clear some fields
+  $("nmDesc").value=""; $("nmImmediate").value=""; $("nmRoot").value="";
+  $("nmPhoto").value=""; nmPhotoData="";
+});
+
+function renderNearMissRecent(){
+  const box = $("nmRecent");
+  const list = (state.nearMisses||[]).slice(0,6);
+  if(!list.length){ box.className="hint"; box.textContent="Henüz kayıt yok."; return; }
+  box.className="";
+  box.innerHTML = list.map(n=>{
+    const overdue = isOverdue(n.due, n.status);
+    return `
+      <div class="k">
+        <div style="display:flex;gap:10px;align-items:flex-start;justify-content:space-between">
+          <div>
+            <div class="row" style="gap:8px">
+              <span class="badge">${escapeHtml(n.type)}</span>
+              <span class="badge">${escapeHtml(n.cons)}</span>
+              ${n.photo ? '<span class="badge">📷 foto</span>' : ''}
+              ${overdue ? '<span class="badge" style="border-color:rgba(255,107,107,.55);color:var(--bad)">gecikmiş</span>' : ''}
+            </div>
+            <div style="font-weight:1000;margin-top:8px">${escapeHtml(shorten(n.desc,120))}</div>
+            <div class="hint" style="margin-top:6px">📍 ${escapeHtml(n.loc||"-")} • 📅 ${escapeHtml(n.date)} • 👤 ${escapeHtml(n.owner||"-")} • ⏳ ${escapeHtml(n.due||"-")}</div>
+            ${n.root ? `<div class="hint" style="margin-top:8px"><b>Kök neden:</b> ${escapeHtml(shorten(n.root,170))}</div>` : ``}
+            ${n.photo ? `<div style="margin-top:10px"><img alt="foto" src="${n.photo}" style="max-width:100%;border-radius:16px;border:1px solid var(--line)"></div>` : ``}
+          </div>
+          <div class="row">
+            <button class="btn" data-act="toggle" data-id="${n.id}">${n.status==="done"?"Aç":"Kapat"}</button>
+            <button class="btn danger" data-act="del" data-id="${n.id}">Sil</button>
+          </div>
+        </div>
+      </div>`;
+  }).join('<div class="hr"></div>');
+
+  box.querySelectorAll("button").forEach(b=>{
+    b.addEventListener("click", ()=>{
+      const id = b.dataset.id;
+      const act = b.dataset.act;
+      if(act==="del"){
+        if(!confirm("Bu kaydı silmek istiyor musun?")) return;
+        state.nearMisses = (state.nearMisses||[]).filter(x=>x.id!==id);
+        save();
+        renderNearMissRecent(); renderDashboard();
+        toast("Silindi");
+      }else{
+        const n = (state.nearMisses||[]).find(x=>x.id===id);
+        if(!n) return;
+        n.status = (n.status==="done" ? "open" : "done");
+        n.updatedAt = new Date().toISOString();
+        save();
+        renderNearMissRecent(); renderDashboard();
+        toast(n.status==="done" ? "Kapandı" : "Açıldı");
+      }
+    });
+  });
+}
+
+// ===== Trainings / Meetings =====
+let trPhotoData = "";
+$("trPhoto").addEventListener("change", async (e)=>{
+  trPhotoData = "";
+  const file = e.target.files && e.target.files[0];
+  if(!file) return;
+  trPhotoData = await readAsDataURL(file, 1100);
+  toast("Fotoğraf eklendi");
+});
+
+function clearTrainingForm(){
+  $("trDate").value = todayISO();
+  $("trType").value = "Toolbox Talk";
+  $("trTopic").value = "";
+  $("trTrainer").value = "";
+  $("trCount").value = "";
+  $("trMin").value = "";
+  $("trLoc").value = "";
+  $("trNotes").value = "";
+  $("trPhoto").value = "";
+  trPhotoData = "";
+}
+$("clearTraining").addEventListener("click", ()=>{ clearTrainingForm(); toast("Form temizlendi"); });
+
+$("saveTraining").addEventListener("click", ()=>{
+  pullMeta();
+  const date = $("trDate").value || todayISO();
+  const type = $("trType").value;
+  const topic = $("trTopic").value.trim();
+  const trainer = $("trTrainer").value.trim();
+  const count = Number($("trCount").value||0);
+  const mins = Number($("trMin").value||0);
+  const loc = $("trLoc").value.trim();
+  const notes = $("trNotes").value.trim();
+  if(!topic){ toast("Konu boş olamaz"); return; }
+  const now = new Date().toISOString();
+  state.trainings.unshift({
+    id: uid(), createdAt: now, updatedAt: now,
+    meta: {...state.meta},
+    date, type, topic, trainer, count, mins, loc, notes,
+    photo: trPhotoData || ""
+  });
+  save();
+  renderTrainingRecent();
+  renderDashboard();
+  toast("Kaydedildi");
+  $("trTopic").value=""; $("trNotes").value=""; $("trPhoto").value=""; trPhotoData="";
+});
+
+function renderTrainingRecent(){
+  const box = $("trRecent");
+  const list = (state.trainings||[]).slice(0,7);
+  if(!list.length){ box.className="hint"; box.textContent="Henüz kayıt yok."; return; }
+  box.className="";
+  box.innerHTML = list.map(t=>{
+    return `
+      <div class="k">
+        <div style="display:flex;gap:10px;align-items:flex-start;justify-content:space-between">
+          <div>
+            <div class="row" style="gap:8px">
+              <span class="badge">${escapeHtml(t.type)}</span>
+              <span class="badge">📅 ${escapeHtml(t.date)}</span>
+              ${t.count ? `<span class="badge">👥 ${t.count}</span>` : ''}
+              ${t.mins ? `<span class="badge">⏱️ ${t.mins} dk</span>` : ''}
+              ${t.photo ? '<span class="badge">📷 foto</span>' : ''}
+            </div>
+            <div style="font-weight:1000;margin-top:8px">${escapeHtml(shorten(t.topic,140))}</div>
+            <div class="hint" style="margin-top:6px">📍 ${escapeHtml(t.loc||"-")} • 👤 ${escapeHtml(t.trainer||"-")}</div>
+            ${t.notes ? `<div class="hint" style="margin-top:8px"><b>Not:</b> ${escapeHtml(shorten(t.notes,170))}</div>` : ``}
+            ${t.photo ? `<div style="margin-top:10px"><img alt="foto" src="${t.photo}" style="max-width:100%;border-radius:16px;border:1px solid var(--line)"></div>` : ``}
+          </div>
+          <div class="row">
+            <button class="btn danger" data-del="${t.id}">Sil</button>
+          </div>
+        </div>
+      </div>`;
+  }).join('<div class="hr"></div>');
+
+  box.querySelectorAll("button").forEach(b=>{
+    b.addEventListener("click", ()=>{
+      const id = b.dataset.del;
+      if(!confirm("Bu kaydı silmek istiyor musun?")) return;
+      state.trainings = (state.trainings||[]).filter(x=>x.id!==id);
+      save();
+      renderTrainingRecent(); renderDashboard();
+      toast("Silindi");
+    });
+  });
+}
+
+function printTrainingSheet(){
+  pullMeta();
+  const meta = state.meta||{};
+  const topic = $("trTopic").value.trim() || "—";
+  const date = $("trDate").value || todayISO();
+  const type = $("trType").value;
+  const trainer = $("trTrainer").value.trim() || "—";
+  const loc = $("trLoc").value.trim() || "—";
+  const mins = $("trMin").value || "—";
+  const site = meta.siteName || "—";
+  const dept = meta.siteDept || "—";
+  const sig = "Fatih AKDENİZ  |  İŞ GÜVENLİĞİ UZMANI (B)  |  HAZIRLAYAN";
+  const w = window.open("", "_blank");
+  const html = `<!doctype html><html lang="tr"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>Eğitim Formu</title>
+    <style>
+      body{font-family:Arial, sans-serif;margin:24px;color:#111}
+      h1{margin:0 0 6px 0;font-size:18px}
+      .sub{color:#444;margin-bottom:14px}
+      .box{border:1px solid #ddd;border-radius:10px;padding:12px;margin:10px 0}
+      table{width:100%;border-collapse:collapse;margin-top:10px}
+      th,td{border:1px solid #ddd;padding:8px;font-size:12px}
+      th{background:#f5f5f5}
+      .sig{margin-top:14px;font-size:12px;color:#333}
+      @media print{ button{display:none} }
+    </style></head><body>
+      <h1>${escapeHtml(type)} Katılım Formu</h1>
+      <div class="sub">${escapeHtml(site)} • ${escapeHtml(dept)} • Tarih: ${escapeHtml(date)}</div>
+      <div class="box">
+        <b>Konu:</b> ${escapeHtml(topic)}<br/>
+        <b>Yer:</b> ${escapeHtml(loc)}<br/>
+        <b>Eğitimi Veren:</b> ${escapeHtml(trainer)}<br/>
+        <b>Süre:</b> ${escapeHtml(mins)} dk
+      </div>
+      <table>
+        <thead><tr><th style="width:50px">No</th><th>Ad Soyad</th><th style="width:130px">İmza</th></tr></thead>
+        <tbody>
+          ${Array.from({length:20}).map((_,i)=>`<tr><td>${i+1}</td><td></td><td></td></tr>`).join("")}
+        </tbody>
+      </table>
+      <div class="sig"><b>${escapeHtml(sig)}</b></div>
+      <button onclick="window.print()">Yazdır / PDF</button>
+    </body></html>`;
+  w.document.open(); w.document.write(html); w.document.close();
+}
+$("printTraining").addEventListener("click", printTrainingSheet);
+
+// ===== Equipment checks =====
+const EQ_TEMPLATES = {
+  "Yangın Tüpü":[
+    "Etiket ve kontrol tarihi güncel mi?",
+    "Mühür/pim sağlam mı?",
+    "Basınç göstergesi uygun aralıkta mı?",
+    "Hortum/nozul sağlam mı?",
+    "Erişim önü açık mı?"
+  ],
+  "Emniyet Kemeri / Lanyard":[
+    "Dokuma/kemer üzerinde kesik, yıpranma var mı?",
+    "Karabina kilidi çalışıyor mu?",
+    "Şok emici/etiketler okunuyor mu?",
+    "Dikişler sağlam mı?",
+    "Kullanım ömrü/seri no takip ediliyor mu?"
+  ],
+  "Merdiven":[
+    "Basamaklar sağlam mı?",
+    "Kaydırmaz ayaklar sağlam mı?",
+    "Hasar/çatlak var mı?",
+    "Doğru kullanım etiketi/uyarı var mı?",
+    "Sabitlenerek kullanılıyor mu?"
+  ],
+  "İskele (Günlük)":[
+    "Etiketleme var mı (kullanıma uygun)?",
+    "Platformlar sağlam ve kaymaz mı?",
+    "Korkuluk/eteklik tam mı?",
+    "Erişim merdiveni güvenli mi?",
+    "Zemin/ankraj uygun mu?"
+  ],
+  "Forklift (Günlük)":[
+    "Korna/ikaz lambaları çalışıyor mu?",
+    "Geri vites alarmı çalışıyor mu?",
+    "Frenler ve direksiyon kontrol edildi mi?",
+    "Çatallar ve zincirlerde hasar var mı?",
+    "Operatör kemeri takıyor mu?"
+  ],
+  "Elektrik Panosu":[
+    "Pano kilitli ve kapalı mı?",
+    "Kaçak akım rölesi mevcut ve testli mi?",
+    "Topraklama etiketi ve uyarılar var mı?",
+    "Kablo girişleri korumalı mı?",
+    "Yanıcı malzeme birikimi yok mu?"
+  ]
+};
+
+function renderEqItems(){
+  const type = $("eqType").value;
+  const items = EQ_TEMPLATES[type] || [];
+  const box = $("eqItems");
+  box.innerHTML = "";
+  items.forEach((q, idx)=>{
+    const div = document.createElement("div");
+    div.className="k";
+    div.innerHTML = `
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+        <div style="font-weight:1000">${idx+1}. ${escapeHtml(q)}</div>
+        <select data-i="${idx}" style="max-width:170px">
+          <option value="Uygun">Uygun</option>
+          <option value="Uygunsuz">Uygunsuz</option>
+          <option value="NA">Uygulanmaz</option>
+        </select>
+      </div>`;
+    box.appendChild(div);
+    box.appendChild(document.createElement("div")).className="hr";
+  });
+  const hrs = box.querySelectorAll(".hr");
+  if(hrs.length) hrs[hrs.length-1].remove();
+}
+
+function clearEqForm(){
+  $("eqDate").value = todayISO();
+  $("eqId").value = "";
+  $("eqNext").value = addDays(todayISO(), 30);
+  $("eqResult").value = "Uygun";
+  $("eqNote").value = "";
+  renderEqItems();
+}
+$("clearEq").addEventListener("click", ()=>{ clearEqForm(); toast("Form temizlendi"); });
+
+$("saveEq").addEventListener("click", ()=>{
+  pullMeta();
+  const type = $("eqType").value;
+  const id = $("eqId").value.trim();
+  const date = $("eqDate").value || todayISO();
+  const next = $("eqNext").value || addDays(date, 30);
+  const result = $("eqResult").value;
+  const note = $("eqNote").value.trim();
+
+  // collect answers
+  const ans = [];
+  $("eqItems").querySelectorAll("select").forEach(sel=>{
+    ans.push({qIdx:Number(sel.dataset.i), v: sel.value});
+  });
+  if(!type){ toast("Ekipman türü seç"); return; }
+
+  const now = new Date().toISOString();
+  state.equipmentChecks.unshift({
+    id: uid(), createdAt: now, updatedAt: now,
+    meta: {...state.meta},
+    type, eqId: id, date, next, result, note,
+    answers: ans
+  });
+  save();
+  renderEqRecent();
+  renderDashboard();
+  toast("Kaydedildi");
+  $("eqId").value=""; $("eqNote").value="";
+});
+
+function renderEqRecent(){
+  const box = $("eqRecent");
+  const list = (state.equipmentChecks||[]).slice(0,8);
+  if(!list.length){ box.className="hint"; box.textContent="Henüz kayıt yok."; return; }
+  box.className="";
+  box.innerHTML = list.map(e=>{
+    const overdue = e.next && e.next < todayISO();
+    const badCount = (e.answers||[]).filter(a=>a.v==="Uygunsuz").length;
+    return `
+      <div class="k">
+        <div style="display:flex;gap:10px;align-items:flex-start;justify-content:space-between">
+          <div>
+            <div class="row" style="gap:8px">
+              <span class="badge">${escapeHtml(e.type)}</span>
+              ${e.eqId ? `<span class="badge"># ${escapeHtml(e.eqId)}</span>` : ''}
+              <span class="badge">📅 ${escapeHtml(e.date)}</span>
+              <span class="badge">➡️ ${escapeHtml(e.next||"-")}</span>
+              ${overdue ? '<span class="badge" style="border-color:rgba(255,107,107,.55);color:var(--bad)">gecikmiş</span>' : ''}
+              ${badCount ? `<span class="badge" style="border-color:rgba(255,204,102,.55);color:var(--warn)">uygunsuz: ${badCount}</span>` : ''}
+            </div>
+            <div style="font-weight:1000;margin-top:8px">${escapeHtml(e.result)}</div>
+            ${e.note ? `<div class="hint" style="margin-top:8px"><b>Not:</b> ${escapeHtml(shorten(e.note,170))}</div>` : ``}
+          </div>
+          <div class="row">
+            <button class="btn danger" data-del="${e.id}">Sil</button>
+          </div>
+        </div>
+      </div>`;
+  }).join('<div class="hr"></div>');
+
+  box.querySelectorAll("button").forEach(b=>{
+    b.addEventListener("click", ()=>{
+      const id = b.dataset.del;
+      if(!confirm("Bu kaydı silmek istiyor musun?")) return;
+      state.equipmentChecks = (state.equipmentChecks||[]).filter(x=>x.id!==id);
+      save();
+      renderEqRecent(); renderDashboard();
+      toast("Silindi");
+    });
+  });
+}
+
+function initEquipment(){
+  const sel = $("eqType");
+  sel.innerHTML = "";
+  Object.keys(EQ_TEMPLATES).forEach(k=>{
+    const o = document.createElement("option");
+    o.value=k; o.textContent=k;
+    sel.appendChild(o);
+  });
+  sel.addEventListener("change", renderEqItems);
+  renderEqItems();
+  clearEqForm();
+}
+
+// Extend tab switch renderer
+const _setActive = setActive;
+setActive = function(tab){
+  _setActive(tab);
+  if(tab==="nearMiss") renderNearMissRecent();
+  if(tab==="trainings") renderTrainingRecent();
+  if(tab==="equipment") renderEqRecent();
+};
+
+// Extend dashboard KPIs with near miss and trainings count (optional)
+const _renderDashboard = renderDashboard;
+renderDashboard = function(){
+  _renderDashboard();
+  // add counts into storage tag tooltip if exists
+  const nmOpen = (state.nearMisses||[]).filter(n=>n.status!=="done").length;
+  const tr30 = (state.trainings||[]).filter(t=>{
+    const d = t.date || "";
+    return d >= addDays(todayISO(), -30);
+  }).length;
+  const eq30 = (state.equipmentChecks||[]).filter(e=>{
+    const d = e.date || "";
+    return d >= addDays(todayISO(), -30);
+  }).length;
+  $("storageTag").title = `Ramak kala açık: ${nmOpen} • Son 30g eğitim: ${tr30} • Son 30g ekipman kontrol: ${eq30}`;
+};
+// ===== Init =====
+  syncMeta();
+    applyExpertToHeader();
+  clearFindingForm();
+  clearNearMissForm();
+  clearTrainingForm();
+  initEquipment();
+  setTheme(state.meta.theme || "dark");
+  applyBrand();
+  updateRiskTag();
+  updateQuickRisk();
+  renderDashboard();
+  renderRecent();
+
+  // Default initial tab
+  setActive("dashboard");
+})();
+</script>
+</body>
+</html>
